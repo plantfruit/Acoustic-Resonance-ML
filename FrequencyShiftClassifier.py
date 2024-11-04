@@ -7,13 +7,13 @@ import pandas as pd
 from scipy.stats import zscore
 
 # Read in the csv file that contains all trial data
-dataFile = pd.read_csv('Data/data1N.csv')
+dataFile = np.loadtxt('Data/data1N.txt')
 
 # Transpose so the labels form a column
 dataFile = dataFile.T
                        
-X = dataFile.iloc[:, 1:].values # 16 predictor variables
-y = dataFile.iloc[:, -1].values # Last column is the label
+X = dataFile[:, :16] # 16 predictor variables
+y = dataFile[:, -1] # Last column is the label
 
 # Normalize with z-score
 #X = (X - X.mean()) / X.std()
@@ -23,7 +23,7 @@ print(X)
 print(y)
 
 # Initialize the KNN Classifier
-knn = KNeighborsClassifier(n_neighbors=4)
+knn = KNeighborsClassifier(n_neighbors=3)
 
 # Perform cross-validated predictions
 y_pred = cross_val_predict(knn, X, y, cv=4)

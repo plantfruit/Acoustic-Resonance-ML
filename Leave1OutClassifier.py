@@ -6,39 +6,47 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.stats import zscore
 
-# Read in the csv file that contains all trial data
-dataFile = pd.read_csv('Data/data1without1.csv')
+int leaveOut = 2
+removeCols = []
 
-testData2cm = pd.read_csv('Data/data1only1.csv')
+# Read in the csv file that contains all trial data
+dataFile = np.loadtxt('Data/data1N.txt')
+
+for col_index, value in enumerate(dataFile[-1]):  # matrix[-1] accesses the last row
+    if value == leaveOut:
+        removeCols.append(col_index)
+
+print("Column indices where value in bottom row is 1:", removeCols)
 
 # Transpose so the labels form a column
 dataFile = dataFile.T
-testData2cm = testData2cm.T
+                       
+X = dataFile[:, :16] # 16 predictor variables
+y = dataFile[:, -1] # Last column is the label
 
-# Extract feature and label columns
-X = dataFile.iloc[:, 1:].values
-y = dataFile.iloc[:, -1].values
+#print(X[:, 1])
+
+# Filter out the columns of the "leave 1 out" distance
+Xredu = np.delete(X, removeCols, 0);
+yredu = np.delete(y, removeCols);
+Xleftone = X[removeCols, :];
+
+print(Xleftone)
+                      
+# Normalize with z-score
+#X = (X - X.mean()) / X.std()
+
+#print(dataFile)
+print(Xredu)
+print(yredu)
 
 # Initialize the KNN Classifier
-knn = KNeighborsClassifier(n_neighbors=4)
+knn = KNeighborsClassifier(n_neighbors=3)
 
-# Train it with the set that doesn't have 2 cm
-knn.fit(X, y)
+knn.fit(Xredu, yredu)
 
-# Predictions
-predictions = knn.predict(testData2cm)
+# Make predictions
+predictions = knn.predict(Xleftone)
+
 print(predictions)
 
-
-# Calculate the confusion matrix
-##labelOf2s = np.matrix([[2, 2, 2, 2]])
-##conf_matrix = confusion_matrix(labelOf2s, predictions)
-##
-##disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix)
-##disp.plot(cmap='Blues')
-##plt.title("Confusion Matrix (KNN Classification)")
-##plt.show()
-
-# Calculate and display the accuracy score
-accuracy = accuracy_score(y, y_pred)
-print(f"Cross-validated Accuracy: {accuracy:.2f}")
