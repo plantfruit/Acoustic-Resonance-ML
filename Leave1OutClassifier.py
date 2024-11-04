@@ -7,9 +7,9 @@ import pandas as pd
 from scipy.stats import zscore
 
 # Read in the csv file that contains all trial data
-dataFile = pd.read_csv('Data/data1Nwithout2.csv')
+dataFile = pd.read_csv('Data/data1without1.csv')
 
-testData2cm = pd.read_csv('Data/data1Nonly2.csv')
+testData2cm = pd.read_csv('Data/data1only1.csv')
 
 # Transpose so the labels form a column
 dataFile = dataFile.T
