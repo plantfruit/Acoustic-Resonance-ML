@@ -7,7 +7,7 @@ import pandas as pd
 from scipy.stats import zscore
 
 # Read in the csv file that contains all trial data
-dataFile = pd.read_csv('Data/data1n.csv')
+dataFile = pd.read_csv('Data/data1N.csv')
 
 # Transpose so the labels form a column
 dataFile = dataFile.T
@@ -16,7 +16,7 @@ X = dataFile.iloc[:, 1:].values # 16 predictor variables
 y = dataFile.iloc[:, -1].values # Last column is the label
 
 # Normalize with z-score
-X = (X - X.mean()) / X.std()
+#X = (X - X.mean()) / X.std()
 
 print(dataFile)
 print(X)
@@ -29,10 +29,13 @@ knn = KNeighborsClassifier(n_neighbors=4)
 y_pred = cross_val_predict(knn, X, y, cv=4)
 
 # Calculate the confusion matrix
+cmlabels = [1,2,3,4,5,6,7,8,9]
 conf_matrix = confusion_matrix(y, y_pred)
 disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix)
 disp.plot(cmap='Blues')
 plt.title("Confusion Matrix (KNN Classification)")
+plt.xticks(ticks=np.arange(len(cmlabels)) , labels=cmlabels )
+plt.yticks(ticks=np.arange(len(cmlabels)) , labels=cmlabels)
 plt.show()
 
 # Calculate and display the accuracy score
