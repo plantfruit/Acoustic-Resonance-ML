@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.stats import zscore
 
-int leaveOut = 2
+leaveOut = 9
 removeCols = []
 
 # Read in the csv file that contains all trial data
