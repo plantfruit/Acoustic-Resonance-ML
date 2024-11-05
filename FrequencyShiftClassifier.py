@@ -8,12 +8,16 @@ from scipy.stats import zscore
 
 # Read in the csv file that contains all trial data
 dataFile = np.loadtxt('Data/data1N.txt')
+ampFile = np.loadtxt('Data/data1Amp.txt')
 
 # Transpose so the labels form a column
 dataFile = dataFile.T
+ampFile = ampFile.T
                        
 X = dataFile[:, :16] # 16 predictor variables
 y = dataFile[:, -1] # Last column is the label
+
+X = ampFile
 
 #X[:,8:16] = abs(X[:,:8])
 
