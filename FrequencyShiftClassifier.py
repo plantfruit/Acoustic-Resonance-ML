@@ -15,6 +15,8 @@ dataFile = dataFile.T
 X = dataFile[:, :16] # 16 predictor variables
 y = dataFile[:, -1] # Last column is the label
 
+#X[:,8:16] = abs(X[:,:8])
+
 # Normalize with z-score
 #X = (X - X.mean()) / X.std()
 
@@ -28,6 +30,11 @@ knn = KNeighborsClassifier(n_neighbors=3)
 # Perform cross-validated predictions
 y_pred = cross_val_predict(knn, X, y, cv=4)
 
+# Calculate and display the accuracy score
+accuracy = accuracy_score(y, y_pred)
+print(accuracy)
+print(f"Cross-validated Accuracy: {accuracy:.2f}")
+
 # Calculate the confusion matrix
 cmlabels = [1,2,3,4,5,6,7,8,9]
 conf_matrix = confusion_matrix(y, y_pred)
@@ -38,6 +45,4 @@ plt.xticks(ticks=np.arange(len(cmlabels)) , labels=cmlabels )
 plt.yticks(ticks=np.arange(len(cmlabels)) , labels=cmlabels)
 plt.show()
 
-# Calculate and display the accuracy score
-accuracy = accuracy_score(y, y_pred)
-print(f"Cross-validated Accuracy: {accuracy:.2f}")
+
