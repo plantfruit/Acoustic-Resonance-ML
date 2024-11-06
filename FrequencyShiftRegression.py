@@ -8,7 +8,7 @@ from scipy.stats import zscore
 from scipy import stats
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
-from sklearn.linear_model import PolynomialRegression
+from sklearn.preprocessing import PolynomialFeatures
 from sklearn.preprocessing import PolynomialFeatures
 
 
@@ -50,7 +50,7 @@ poly = PolynomialFeatures(2)
 X_poly = poly.fit_transform(X)
 
 model = LinearRegression()
-model.fit(X, y)
+model.fit(X_poly, y)
 
 linregpred = model.predict(X_poly)
 print(linregpred)
