@@ -13,7 +13,7 @@ from sklearn.preprocessing import PolynomialFeatures
 
 
 
-leaveOut = 9
+leaveOut = 2
 removeCols = []
 
 # Read in the csv file that contains all trial data
@@ -44,7 +44,7 @@ print(yredu)
 
 # Regression models
 # Simplify to just the frequency shift features now (no sign maps)
-poly = PolynomialFeatures(2)
+poly = PolynomialFeatures(3)
 
 # Transform the features to polynomial features
 X_poly = poly.fit_transform(X)
@@ -56,6 +56,23 @@ linregpred = model.predict(X_poly)
 print(linregpred)
 mse = mean_squared_error(y, linregpred)
 r2 = r2_score(y, linregpred)
+print(mse)
+print(r2)
+
+# Regression models, with leave 1 out data 
+# Transform the features to polynomial features
+Xpolyred = poly.fit_transform(Xredu)
+
+modelred = model.fit(Xpolyred, yredu)
+
+# Prepare training data (the left out data)
+Xleftonep = poly.fit_transform(Xleftone)
+leftoneLabels = [leaveOut, leaveOut, leaveOut];
+
+redpred = modelred.predict(Xleftonep)
+print(redpred)
+mse = mean_squared_error(leftoneLabels, redpred)
+r2 = r2_score(leftoneLabels, redpred)
 print(mse)
 print(r2)
 
