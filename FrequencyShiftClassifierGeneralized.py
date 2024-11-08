@@ -7,7 +7,7 @@ import pandas as pd
 from scipy.stats import zscore
 
 # Read in the csv file that contains all trial data
-dataFile = np.loadtxt('Data/data1peakNumValsN.txt')
+dataFile = np.loadtxt('Data/data1pktrNums.txt')
 ampFile = np.loadtxt('Data/data1Amp.txt')
 
 # Assumes that the labels and the features are stored in separate files
@@ -16,11 +16,12 @@ ampFile = np.loadtxt('Data/data1Amp.txt')
 #dataFile = dataFile.T
 ampFile = ampFile.T
                        
-X = dataFile
-y = [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9]
+X = dataFile[:20]
+#y = [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9]
+y = [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5]
 
 print(X)
-#X = X.reshape(-1, 1)
+X = X.reshape(-1, 1)
 #print(dataFile)
 print(X)
 print(y)
