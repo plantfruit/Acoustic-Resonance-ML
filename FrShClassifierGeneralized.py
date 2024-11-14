@@ -8,27 +8,37 @@ from scipy.stats import zscore
 
 frshifts1 = 'Data/data1frshiftm.txt'
 labels1 = 'Data/data1labelsm.txt'
-frshifts2 = 'Data/data1frshmagsig.txt' # Frequency shift magnitude, followed by sign binary values
+frshiftsNsigns = 'Data/data1frshmagsig.txt' # Frequency shift magnitude, followed by sign binary values
 frshsigns = 'Data/data1frshiftsigns.txt' # Binary sign values only
 pressAmplitudes = 'Data/data1pressamp.txt' # Amplitude levels from pressed down state
+frshifts2 = 'Data/data2frshiftm.txt'
+frshsigns2 = 'Data/data2frshiftsigns.txt'
+pressAmplitudes2 = 'Data/data2pressamp.txt'
+labels2 = 'Data/data2labels.txt'
+
+trial1 = [frshifts1, frshsigns, pressAmplitudes]
+trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
 
 # Control parameters
 dataFileName = pressAmplitudes
 labelFileName = labels1
+testLabelFileName = labels2
 
 numReplications = 4
-combineVars = False
+combineVars = True
 normalizeFeature = True
-combineVarNames = [frshifts1, frshsigns, pressAmplitudes] 
+combineTrainData = trial1
+combineTestData = trial2
 
 # Read in the csv file that contains all trial data
 # Assumes that the labels and the features are stored in separate files
 dataFile = np.loadtxt(dataFileName)
 labelFile = np.loadtxt(labelFileName)
+otherSetLabels = np.loadtxt(testLabelFileName)
 
 X = []
 if (combineVars):
-    for varName in combineVarNames:
+    for varName in combineTrainData:
         featureTable = np.loadtxt(varName)
         if (featureTable.ndim < 2):
             featureTable = np.array([featureTable]).T
@@ -71,10 +81,42 @@ conf_matrix = confusion_matrix(y, y_pred)
 # Plot the confusion matrix
 disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix)
 disp.plot(cmap='Blues')
-plt.title("Confusion Matrix (KNN Classification)")
+plt.title("Confusion Matrix (KNN Classification Cross Validation)")
 plt.xticks(ticks=np.arange(len(cmlabels)) , labels=cmlabels )
 plt.yticks(ticks=np.arange(len(cmlabels)) , labels=cmlabels)
 plt.show()
+
+testData = []
+if (combineVars):
+    for varName in combineTestData:
+        featureTable = np.loadtxt(varName)
+        print(featureTable)
+        if (featureTable.ndim < 2):
+            featureTable = np.array([featureTable]).T
+        # Normalize each data set separately
+        if (normalizeFeature):
+            featureTable = zscore(featureTable, axis = 1)
+        testData.append(featureTable)
+        
+    testData = np.hstack(testData)
+
+print(testData)
+otherSetPreds = knn.predict(testData)
+otherSetAccuracy = accuracy_score(otherSetLabels, otherSetPreds)
+print("Test Dataset KNN Accuracy")
+print(otherSetAccuracy)
+print(otherSetPreds)
+# Calculate the confusion matrix
+cmlabels_test = cmlabels
+conf_matrix_test = confusion_matrix(otherSetLabels, otherSetPreds)
+# Plot the confusion matrix
+disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix_test)
+disp.plot(cmap='Blues')
+plt.title("Confusion Matrix (KNN Classification of 2nd Data Set)")
+plt.xticks(ticks=np.arange(len(cmlabels_test)) , labels=cmlabels_test )
+plt.yticks(ticks=np.arange(len(cmlabels_test)) , labels=cmlabels_test)
+plt.show()
+
 
 
 
