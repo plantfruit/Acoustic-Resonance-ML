@@ -24,9 +24,11 @@ labels2 = 'Data/data2labels.txt'
 frshiftsDecimals = 'Data/data3decimalsfrsh.txt' # 1.5 to 8.5, 2 replication trials each 
 labels3 = 'Data/data3labels.txt'
 frshiftsFirstHalf = 'Data/data4frshfirsthalf.txt' # Integers 1 to 5, 4 replication trials each
-labels4 = 'Data/data4labels.txt'
+labels4 = 'Data/data4labels.txt' # Labels for first half (1 to 5 cm)
 frshiftsDecimalsFirstHalf = 'Data/data5decimalsfirsthalf.txt' # 1.5 to 5.5, 2 replication trials each
-labels5 = 'Data/data5labels.txt'
+labels5 = 'Data/data5labels.txt' # Labels for first half decimals (1.5 to 5.5 cm)
+fftIntsFirstHalf = 'Data/data7FFTintfirsthalf.txt'
+fftDecsFirstHalf = 'Data/data7FFTdecimalfirsthalf.txt'
 
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
@@ -37,9 +39,9 @@ leaveOut = 2
 removeCols = []
 
 # Filenames that are going to be used
-dataFileName = frshiftsFirstHalf
+dataFileName = fftIntsFirstHalf
 labelFileName = labels4
-testDataFileName = frshiftsDecimalsFirstHalf
+testDataFileName = fftDecsFirstHalf
 testLabelFileName = labels5
 
 # Newer control parameters
@@ -123,10 +125,10 @@ X_polytest = poly.fit_transform(Xtest)
 
 # Train model
 model = LinearRegression()
-model.fit(X_poly, y)
+model.fit(X, y)
 
 # Make predictions
-linregpred = model.predict(X_polytest)
+linregpred = model.predict(Xtest)
 print(linregpred)
 mse = mean_squared_error(ytest, linregpred)
 #r2 = r2_score(y, linregpred)
