@@ -31,6 +31,10 @@ fftIntsFirstHalf = 'Data/data7FFTintfirsthalf.txt'
 fftDecsFirstHalf = 'Data/data7FFTdecimalfirsthalf.txt'
 fftPowerIntHalf = 'Data/data8FFTintpowerfirsthalf.txt'
 fftPowerDecHalf = 'Data/data8FFTdecpowerfirsthalf.txt'
+frshInts2ndHalf = 'Data/data9frshInt2ndHalf.txt'
+frshDec2ndHalf = 'Data/data9frshDec2ndHalf.txt'
+fftPowerInt2ndHalf = 'Data/data10FFTintpower2ndhalf.txt'
+fftPowerDec2ndHalf = 'Data/data10FFTdecpower2ndhalf.txt'
 
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
