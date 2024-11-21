@@ -35,9 +35,14 @@ frshInts2ndHalf = 'Data/data9frshInt2ndHalf.txt'
 frshDec2ndHalf = 'Data/data9frshDec2ndHalf.txt'
 fftPowerInt2ndHalf = 'Data/data10FFTintpower2ndhalf.txt'
 fftPowerDec2ndHalf = 'Data/data10FFTdecpower2ndhalf.txt'
+labelsInt2ndHalf = 'Data/data9labels.txt'
+labelsDec2ndHalf = 'Data/data10labels.txt'
 
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
+
+frshFFTPow2ndHalf = []
+frshFFTPow2ndHalfTest = []
 
 # Old control parameters
 performingLeaveOut = False
@@ -45,15 +50,17 @@ leaveOut = 2
 removeCols = []
 
 # Filenames that are going to be used
-dataFileName = fftPowerIntHalf
-labelFileName = labels4
-testDataFileName = fftPowerDecHalf
-testLabelFileName = labels5
+dataFileName = fftPowerInt2ndHalf
+labelFileName = labelsInt2ndHalf
+testDataFileName = fftPowerDec2ndHalf
+testLabelFileName = labelsDec2ndHalf
 
 # Newer control parameters
 numReplications = 4
+polynomialRegressionDegree = 8
 combineVars = False
 normalizeFeature = True
+conductLinearRegression = False
 combineTrainData = trial1
 combineTestData = trial2
 
@@ -128,7 +135,7 @@ if (performingLeaveOut):
 
 # Regression models
 # Simplify to just the frequency shift features now (no sign maps)
-poly = PolynomialFeatures(5)
+poly = PolynomialFeatures(polynomialRegressionDegree)
 
 # Transform the features to polynomial features
 X_poly = poly.fit_transform(X)
@@ -136,10 +143,19 @@ X_polytest = poly.fit_transform(Xtest)
 
 # Train model
 model = LinearRegression()
-model.fit(X_poly, y)
+if (conductLinearRegression):
+    model.fit(X, y)
+else:
+    model.fit(X_poly, y)
 
 # Make predictions
-linregpred = model.predict(X_polytest)
+inputData = []
+if (conductLinearRegression):
+    inputData = Xtest
+else:
+    inputData = X_polytest
+    
+linregpred = model.predict(inputData)
 print(linregpred)
 mse = mean_squared_error(ytest, linregpred)
 #r2 = r2_score(y, linregpred)
