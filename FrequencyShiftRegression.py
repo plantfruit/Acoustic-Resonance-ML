@@ -29,6 +29,8 @@ frshiftsDecimalsFirstHalf = 'Data/data5decimalsfirsthalf.txt' # 1.5 to 5.5, 2 re
 labels5 = 'Data/data5labels.txt' # Labels for first half decimals (1.5 to 5.5 cm)
 fftIntsFirstHalf = 'Data/data7FFTintfirsthalf.txt'
 fftDecsFirstHalf = 'Data/data7FFTdecimalfirsthalf.txt'
+fftPowerIntHalf = 'Data/data8FFTintpowerfirsthalf.txt'
+fftPowerDecHalf = 'Data/data8FFTdecpowerfirsthalf.txt'
 
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
@@ -39,9 +41,9 @@ leaveOut = 2
 removeCols = []
 
 # Filenames that are going to be used
-dataFileName = fftIntsFirstHalf
+dataFileName = fftPowerIntHalf
 labelFileName = labels4
-testDataFileName = fftDecsFirstHalf
+testDataFileName = fftPowerDecHalf
 testLabelFileName = labels5
 
 # Newer control parameters
@@ -59,7 +61,8 @@ testFile = np.loadtxt(testDataFileName)
 otherSetLabels = np.loadtxt(testLabelFileName)
 
 X = []
-if (combineVars):
+# Load and process the data
+if (combineVars): # Combine multiple variable tables into 1 big table 
     for varName in combineTrainData:
         featureTable = np.loadtxt(varName)
         if (featureTable.ndim < 2):
@@ -69,12 +72,14 @@ if (combineVars):
             featureTable = zscore(featureTable)
         X.append(featureTable)
     X = np.hstack(X)
-else:    
+else: # Or just read all variables from 1 table
+    if (dataFile.ndim < 2):
+        dataFile = np.array([dataFile]).T
     X = dataFile
     if (normalizeFeature):
         X = zscore(X)
 Xtest = []
-if (combineVars):
+if (combineVars): # Combine multiple variable tables into 1 big table 
     for varName in combineTestData:
         featureTable = np.loadtxt(varName)
         if (featureTable.ndim < 2):
@@ -83,8 +88,10 @@ if (combineVars):
         if (normalizeFeature):
             featureTable = zscore(featureTable)
         Xtest.append(featureTable)
-    Xtest = np.hstack(X)
-else:    
+    Xtest = np.hstack(X) 
+else: # Or just read all variables from 1 table
+    if (testFile.ndim < 2):
+        testFile = np.array([testFile]).T
     Xtest = testFile
     if (normalizeFeature):
         Xtest = zscore(Xtest)
@@ -117,7 +124,7 @@ if (performingLeaveOut):
 
 # Regression models
 # Simplify to just the frequency shift features now (no sign maps)
-poly = PolynomialFeatures(3)
+poly = PolynomialFeatures(5)
 
 # Transform the features to polynomial features
 X_poly = poly.fit_transform(X)
@@ -125,10 +132,10 @@ X_polytest = poly.fit_transform(Xtest)
 
 # Train model
 model = LinearRegression()
-model.fit(X, y)
+model.fit(X_poly, y)
 
 # Make predictions
-linregpred = model.predict(Xtest)
+linregpred = model.predict(X_polytest)
 print(linregpred)
 mse = mean_squared_error(ytest, linregpred)
 #r2 = r2_score(y, linregpred)
