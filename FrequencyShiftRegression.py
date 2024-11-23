@@ -38,7 +38,18 @@ frshDec2ndHalf = 'Data/data9frshDec2ndHalf.txt' # Frequency shifts for 5.5 - 8.5
 fftPowerInt2ndHalf = 'Data/data10FFTintpower2ndhalf.txt' # FFT dot products for 5 - 9 cm
 fftPowerDec2ndHalf = 'Data/data10FFTdecpower2ndhalf.txt' # FFT dot products for 5.5 - 8.5 cm
 labelsInt2ndHalf = 'Data/data9labels.txt' # Labels for 5 to 9 cm        (1 cm intervals for both of these label variables) 
-labelsDec2ndHalf = 'Data/data10labels.txt' # Labels for 5.5 to 8.5 cm 
+labelsDec2ndHalf = 'Data/data10labels.txt' # Labels for 5.5 to 8.5 cm
+
+sineFitInt1stHalf = 'Data/data11SineFitInt1stHalf.txt'
+sineFitInt2ndHalf = 'Data/data11SineFitInt2ndHalf.txt'
+sineFitDec1stHalf = 'Data/data11SineFitDec1stHalf.txt'
+sineFitDec2ndHalf = 'Data/data11SineFitDec2ndHalf.txt'
+
+# "Revised" trials by removing outliers 
+sineFitInt1stHalfRe = 'Data/data12SineFitInt1stHalfRe.txt'
+sineFitDec1stHalfRe = 'Data/data12SineFitDec1stHalfRe.txt'
+sineFitInt2ndHalfRe = 'Data/data12SineFitInt2ndHalfRe.txt'
+sineFitDec2ndHalfRe = 'Data/data12SineFitDec2ndHalfRe.txt'
 
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
@@ -52,15 +63,16 @@ leaveOut = 2
 removeCols = []
 
 # Filenames that are going to be used
-dataFileName = fftPowerInt2ndHalf
-labelFileName = labelsInt2ndHalf
-testDataFileName = fftPowerDec2ndHalf
-testLabelFileName = labelsDec2ndHalf
+dataFileName = sineFitInt1stHalfRe
+testDataFileName = sineFitDec1stHalfRe
+
+labelFileName = labelsInt1stHalf
+testLabelFileName = labelsDec1stHalf
 
 # Newer control parameters
 numReplications = 4
-polynomialRegressionDegree = 3
-combineVars = True
+polynomialRegressionDegree = 2
+combineVars = False 
 normalizeFeature = True
 conductLinearRegression = False
 combineTrainData = frshFFTPow2ndHalf#trial1
