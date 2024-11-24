@@ -40,6 +40,7 @@ fftPowerDec2ndHalf = 'Data/data10FFTdecpower2ndhalf.txt' # FFT dot products for 
 labelsInt2ndHalf = 'Data/data9labels.txt' # Labels for 5 to 9 cm        (1 cm intervals for both of these label variables) 
 labelsDec2ndHalf = 'Data/data10labels.txt' # Labels for 5.5 to 8.5 cm
 
+# Sine fit parameters (period and phase offset) on the frequency shift curves
 sineFitInt1stHalf = 'Data/data11SineFitInt1stHalf.txt'
 sineFitInt2ndHalf = 'Data/data11SineFitInt2ndHalf.txt'
 sineFitDec1stHalf = 'Data/data11SineFitDec1stHalf.txt'
@@ -50,6 +51,10 @@ sineFitInt1stHalfRe = 'Data/data12SineFitInt1stHalfRe.txt'
 sineFitDec1stHalfRe = 'Data/data12SineFitDec1stHalfRe.txt'
 sineFitInt2ndHalfRe = 'Data/data12SineFitInt2ndHalfRe.txt'
 sineFitDec2ndHalfRe = 'Data/data12SineFitDec2ndHalfRe.txt'
+
+# Spline interpolation FFT values
+interpSplInt1stHalf = 'Data/data13InterSplInt1stHalf.txt'
+interpSplDec1stHalf = 'Data/data13InterSplDec1stHalf.txt'
 
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
@@ -63,15 +68,15 @@ leaveOut = 2
 removeCols = []
 
 # Filenames that are going to be used
-dataFileName = sineFitInt1stHalfRe
-testDataFileName = sineFitDec1stHalfRe
+dataFileName = interpSplInt1stHalf
+testDataFileName = interpSplDec1stHalf
 
 labelFileName = labelsInt1stHalf
 testLabelFileName = labelsDec1stHalf
 
 # Newer control parameters
 numReplications = 4
-polynomialRegressionDegree = 2
+polynomialRegressionDegree = 4
 combineVars = False 
 normalizeFeature = True
 conductLinearRegression = False
