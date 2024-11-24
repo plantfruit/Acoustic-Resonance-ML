@@ -26,23 +26,25 @@ labelsDec1stHalf = 'Data/data5labels.txt' # Labels for first half decimals (1.5 
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
 
-# Control parameters
-dataFileName = pressAmplitudes
-labelFileName = labels1
-testLabelFileName = labels2
-
-numReplications = 4
-combineVars = True
-normalizeFeature = True
-combineTrainData = trial1
-combineTestData = trial2
-
 # Filenames that are going to be used
 dataFileName = frshiftsFirstHalf
 testDataFileName = frshiftsDecimalsFirstHalf
 
 labelFileName = labelsInt1stHalf
 testLabelFileName = labelsDec1stHalf
+
+numReplications = 4
+combineVars = False
+normalizeFeature = True
+combineTrainData = trial1
+combineTestData = trial2
+
+# Read in the csv file that contains all trial data
+# Assumes that the labels and the features are stored in separate files
+dataFile = np.loadtxt(dataFileName)
+labelFile = np.loadtxt(labelFileName)
+testFile = np.loadtxt(testDataFileName)
+otherSetLabels = np.loadtxt(testLabelFileName)
 
 X = []
 # Load and process the data
@@ -105,10 +107,11 @@ print(f"Cross-validated Accuracy: {accuracy:.2f}")
 # Perform predictions for the regular classifier (separate training and test datasets)
 knn = KNeighborsClassifier(n_neighbors=numReplications)
 knn.fit(X, y)
-predictions2 = knn.predict(X)
-accuracy2 = accuracy_score(y, predictions2)
-print("Non-cross validated KNN Accuracy")
-print(accuracy2)
+
+##predictions2 = knn.predict(X)
+##accuracy2 = accuracy_score(y, predictions2)
+##print("Non-cross validated KNN Accuracy")
+##print(accuracy2)
 
 # Calculate the confusion matrix for cross-validated test
 cmlabels = [1,2,3,4,5,6,7,8,9]
@@ -122,22 +125,22 @@ plt.yticks(ticks=np.arange(len(cmlabels)) , labels=cmlabels)
 plt.show()
 
 # Calculate the confusion matrix for regular classification test
-print(testData)
-otherSetPreds = knn.predict(testData)
-otherSetAccuracy = accuracy_score(otherSetLabels, otherSetPreds)
+print(Xtest)
+otherSetPreds = knn.predict(Xtest)
+#otherSetAccuracy = accuracy_score(otherSetLabels, otherSetPreds)
 print("Test Dataset KNN Accuracy")
-print(otherSetAccuracy)
+#print(otherSetAccuracy)
 print(otherSetPreds)
-# Calculate the confusion matrix
-cmlabels_test = cmlabels
-conf_matrix_test = confusion_matrix(otherSetLabels, otherSetPreds)
-# Plot the confusion matrix
-disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix_test)
-disp.plot(cmap='Blues')
-plt.title("Confusion Matrix (KNN Classification of 2nd Data Set)")
-plt.xticks(ticks=np.arange(len(cmlabels_test)) , labels=cmlabels_test )
-plt.yticks(ticks=np.arange(len(cmlabels_test)) , labels=cmlabels_test)
-plt.show()
+### Calculate the confusion matrix
+##cmlabels_test = cmlabels
+##conf_matrix_test = confusion_matrix(otherSetLabels, otherSetPreds)
+### Plot the confusion matrix
+##disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix_test)
+##disp.plot(cmap='Blues')
+##plt.title("Confusion Matrix (KNN Classification of 2nd Data Set)")
+##plt.xticks(ticks=np.arange(len(cmlabels_test)) , labels=cmlabels_test )
+##plt.yticks(ticks=np.arange(len(cmlabels_test)) , labels=cmlabels_test)
+##plt.show()
 
 
 
