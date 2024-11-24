@@ -16,6 +16,13 @@ frshsigns2 = 'Data/data2frshiftsigns.txt'
 pressAmplitudes2 = 'Data/data2pressamp.txt'
 labels2 = 'Data/data2labels.txt'
 
+frshiftsDecimals = 'Data/data3decimalsfrsh.txt' # 1.5 to 8.5, 2 replication trials each 
+labels3 = 'Data/data3labels.txt'
+frshiftsFirstHalf = 'Data/data4frshfirsthalf.txt' # Integers 1 to 5, 4 replication trials each
+labelsInt1stHalf = 'Data/data4labels.txt' # Labels for first half (1 to 5 cm)
+frshiftsDecimalsFirstHalf = 'Data/data5decimalsfirsthalf.txt' # 1.5 to 5.5, 2 replication trials each
+labelsDec1stHalf = 'Data/data5labels.txt' # Labels for first half decimals (1.5 to 5.5 cm)
+
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
 
@@ -30,16 +37,19 @@ normalizeFeature = True
 combineTrainData = trial1
 combineTestData = trial2
 
-# Read in the csv file that contains all trial data
-# Assumes that the labels and the features are stored in separate files
-dataFile = np.loadtxt(dataFileName)
-labelFile = np.loadtxt(labelFileName)
-otherSetLabels = np.loadtxt(testLabelFileName)
+# Filenames that are going to be used
+dataFileName = frshiftsFirstHalf
+testDataFileName = frshiftsDecimalsFirstHalf
+
+labelFileName = labelsInt1stHalf
+testLabelFileName = labelsDec1stHalf
 
 X = []
-if (combineVars):
+# Load and process the data
+if (combineVars): # Combine multiple variable tables into 1 big table 
     for varName in combineTrainData:
         featureTable = np.loadtxt(varName)
+
         if (featureTable.ndim < 2):
             featureTable = np.array([featureTable]).T
         # Normalize each data set separately
@@ -47,21 +57,44 @@ if (combineVars):
             featureTable = zscore(featureTable)
         X.append(featureTable)
     X = np.hstack(X)
-else:    
+else: # Or just read all variables from 1 table
+    if (dataFile.ndim < 2):
+        dataFile = np.array([dataFile]).T
     X = dataFile
     if (normalizeFeature):
-        X = zscore(X)   
+        X = zscore(X)
+Xtest = []
+if (combineVars): # Combine multiple variable tables into 1 big table 
+    for varName in combineTestData:        
+        featureTable = np.loadtxt(varName)
+
+        if (featureTable.ndim < 2):
+            featureTable = np.array([featureTable]).T
+        # Normalize each data set separately
+        if (normalizeFeature):
+            featureTable = zscore(featureTable)
+        Xtest.append(featureTable)
+    Xtest = np.hstack(Xtest) 
+else: # Or just read all variables from 1 table
+    if (testFile.ndim < 2):
+        testFile = np.array([testFile]).T
+    Xtest = testFile
+    if (normalizeFeature):
+        Xtest = zscore(Xtest)
 
 y = labelFile
+ytest = otherSetLabels
 
 print(X)
+print(Xtest)
 print(y)
+print(otherSetLabels)
     
 # Initialize the KNN Classifier
-knn = KNeighborsClassifier(n_neighbors=numReplications)
+knnCV = KNeighborsClassifier(n_neighbors=numReplications)
 
 # Perform cross-validated predictions
-y_pred = cross_val_predict(knn, X, y, cv=numReplications)
+y_pred = cross_val_predict(knnCV, X, y, cv=numReplications)
 
 # Calculate and display the accuracy score
 accuracy = accuracy_score(y, y_pred)
@@ -69,13 +102,15 @@ accuracy = accuracy_score(y, y_pred)
 print(accuracy)
 print(f"Cross-validated Accuracy: {accuracy:.2f}")
 
+# Perform predictions for the regular classifier (separate training and test datasets)
+knn = KNeighborsClassifier(n_neighbors=numReplications)
 knn.fit(X, y)
 predictions2 = knn.predict(X)
 accuracy2 = accuracy_score(y, predictions2)
 print("Non-cross validated KNN Accuracy")
 print(accuracy2)
 
-# Calculate the confusion matrix
+# Calculate the confusion matrix for cross-validated test
 cmlabels = [1,2,3,4,5,6,7,8,9]
 conf_matrix = confusion_matrix(y, y_pred)
 # Plot the confusion matrix
@@ -86,20 +121,7 @@ plt.xticks(ticks=np.arange(len(cmlabels)) , labels=cmlabels )
 plt.yticks(ticks=np.arange(len(cmlabels)) , labels=cmlabels)
 plt.show()
 
-testData = []
-if (combineVars):
-    for varName in combineTestData:
-        featureTable = np.loadtxt(varName)
-        print(featureTable)
-        if (featureTable.ndim < 2):
-            featureTable = np.array([featureTable]).T
-        # Normalize each data set separately
-        if (normalizeFeature):
-            featureTable = zscore(featureTable, axis = 1)
-        testData.append(featureTable)
-        
-    testData = np.hstack(testData)
-
+# Calculate the confusion matrix for regular classification test
 print(testData)
 otherSetPreds = knn.predict(testData)
 otherSetAccuracy = accuracy_score(otherSetLabels, otherSetPreds)
