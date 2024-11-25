@@ -124,16 +124,20 @@ print("Test Dataset KNN Accuracy")
 #print(otherSetAccuracy)
 print(otherSetPreds)
 
+# ---------------------------------------------------------------------------------------------
 # 2nd stage of hierarchical classifier (Polynomial/linear regression classifier)
+# ---------------------------------------------------------------------------------------------
 
 # Read in a different feature set for the hierarchial classifier
-X = 
-if (normalizeFeature):
-        Xtest = zscore(Xtest)
-Xtest = 
-if (normalizeFeature):
-        Xtest = zscore(Xtest)
+dataFileNameH = frshiftsFirstHalf
+testDataFileNameH = frshiftsDecimalsFirstHalf
 
+X = np.loadtxt(dataFileNameH)
+Xtest = np.loadtxt(testDataFileNameH)
+
+if (normalizeFeature):
+    X = zscore(X)
+    Xtest = zscore(Xtest)
 
 # Simplify to just the frequency shift features now (no sign maps)
 poly = PolynomialFeatures(polynomialRegressionDegree)
@@ -152,7 +156,7 @@ for i in range(firstSetPredsDims[0]):
     if (integerPrediction == 1):
         Xsegment = X[0:8,:]
         ysegment = y[0:8]
-        ysegment = [0,0,0,0,1,1,1,1]
+        ysegment = [-1,-1,-1,-1,0,0,0,0]
     elif (integerPrediction == 5):
         Xsegment = X[12:21,:]
         ysegment = y[12:21]
@@ -166,11 +170,12 @@ for i in range(firstSetPredsDims[0]):
 
     Xtestsegment = Xtest[i, :]
     ytestsegment = ytest[i]
+
     
-    print(integerPrediction)
     #print(Xsegment)
     #print(ysegment)
     #print(Xtestsegment)
+    print("Actual value:")
     print(ytestsegment)    
 
     if (Xtestsegment.ndim < 2):
@@ -191,9 +196,12 @@ for i in range(firstSetPredsDims[0]):
         inputData = Xtestsegment
     else:
         inputData = X_polytest
+
+    print("Integer prediction:")
+    print(integerPrediction)
         
     linregpred = model.predict(inputData)
-    print('prediction')
+    print("Decimal modifier:")
     print(linregpred)
 #mse = mean_squared_error(ytestsegment, linregpred)
 #r2 = r2_score(y, linregpred)
