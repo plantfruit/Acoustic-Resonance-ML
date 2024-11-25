@@ -5,6 +5,10 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, accuracy_s
 import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.stats import zscore
+from scipy import stats
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.preprocessing import PolynomialFeatures
 
 frshifts1 = 'Data/data1frshiftm.txt'
 labels1 = 'Data/data1labelsm.txt'
@@ -43,8 +47,12 @@ testDataFileName = fftPowerDec1stHalf
 labelFileName = labelsInt1stHalf
 testLabelFileName = labelsDec1stHalf
 
+# Newer control parameters
 numReplications = 4
-combineVars = False
+polynomialRegressionDegree = 4
+combineVars = False 
+normalizeFeature = True
+conductLinearRegression = False
 normalizeFeature = True
 combineTrainData = trial1
 combineTestData = trial2
@@ -101,38 +109,12 @@ print(X)
 print(Xtest)
 print(y)
 print(otherSetLabels)
-    
-# Initialize the KNN Classifier
-knnCV = KNeighborsClassifier(n_neighbors=numReplications)
 
-# Perform cross-validated predictions
-y_pred = cross_val_predict(knnCV, X, y, cv=numReplications)
-
-# Calculate and display the accuracy score
-accuracy = accuracy_score(y, y_pred)
-
-print(accuracy)
-print(f"Cross-validated Accuracy: {accuracy:.2f}")
+# 1st stage of hierarchical classifier (KNN classifier)
 
 # Perform predictions for the regular classifier (separate training and test datasets)
 knn = KNeighborsClassifier(n_neighbors=numReplications)
 knn.fit(X, y)
-
-##predictions2 = knn.predict(X)
-##accuracy2 = accuracy_score(y, predictions2)
-##print("Non-cross validated KNN Accuracy")
-##print(accuracy2)
-
-# Calculate the confusion matrix for cross-validated test
-cmlabels = [1,2,3,4,5,6,7,8,9]
-conf_matrix = confusion_matrix(y, y_pred)
-# Plot the confusion matrix
-disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix)
-disp.plot(cmap='Blues')
-plt.title("Confusion Matrix (KNN Classification Cross Validation)")
-plt.xticks(ticks=np.arange(len(cmlabels)) , labels=cmlabels )
-plt.yticks(ticks=np.arange(len(cmlabels)) , labels=cmlabels)
-plt.show()
 
 # Calculate the confusion matrix for regular classification test
 print(Xtest)
@@ -141,18 +123,82 @@ otherSetPreds = knn.predict(Xtest)
 print("Test Dataset KNN Accuracy")
 #print(otherSetAccuracy)
 print(otherSetPreds)
-### Calculate the confusion matrix
-##cmlabels_test = cmlabels
-##conf_matrix_test = confusion_matrix(otherSetLabels, otherSetPreds)
-### Plot the confusion matrix
-##disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix_test)
-##disp.plot(cmap='Blues')
-##plt.title("Confusion Matrix (KNN Classification of 2nd Data Set)")
-##plt.xticks(ticks=np.arange(len(cmlabels_test)) , labels=cmlabels_test )
-##plt.yticks(ticks=np.arange(len(cmlabels_test)) , labels=cmlabels_test)
-##plt.show()
+
+# 2nd stage of hierarchical classifier (Polynomial/linear regression classifier)
+
+# Read in a different feature set for the hierarchial classifier
+X = 
+if (normalizeFeature):
+        Xtest = zscore(Xtest)
+Xtest = 
+if (normalizeFeature):
+        Xtest = zscore(Xtest)
 
 
+# Simplify to just the frequency shift features now (no sign maps)
+poly = PolynomialFeatures(polynomialRegressionDegree)
+
+# Transform the features to polynomial features
+firstSetPredsDims = otherSetPreds.shape
+for i in range(firstSetPredsDims[0]):
+    integerPrediction = otherSetPreds[i]
+    Xsegment = []
+    ysegment = []
+
+    print('NEW BLOCK')
+
+    # Read select parts of the feature data set
+    # Handle boundary conditions
+    if (integerPrediction == 1):
+        Xsegment = X[0:8,:]
+        ysegment = y[0:8]
+        ysegment = [0,0,0,0,1,1,1,1]
+    elif (integerPrediction == 5):
+        Xsegment = X[12:21,:]
+        ysegment = y[12:21]
+        ysegment = [-1,-1,-1,-1,0,0,0,0]
+    # "In the middle" conditions
+    else:
+        Xsegment = X[(int(integerPrediction) - 2) * 4:(int(integerPrediction) + 1) * 4,:]
+        ysegment = y[(int(integerPrediction) - 2) * 4:(int(integerPrediction) + 1) * 4]
+        ysegment = [-1,-1,-1,-1,0,0,0,0,1,1,1,1]
+    
+
+    Xtestsegment = Xtest[i, :]
+    ytestsegment = ytest[i]
+    
+    print(integerPrediction)
+    #print(Xsegment)
+    #print(ysegment)
+    #print(Xtestsegment)
+    print(ytestsegment)    
+
+    if (Xtestsegment.ndim < 2):
+        Xtestsegment = Xtestsegment.reshape(1,-1)
+    X_poly = poly.fit_transform(Xsegment)
+    X_polytest = poly.fit_transform(Xtestsegment)
+
+    # Train model
+    model = LinearRegression()
+    if (conductLinearRegression):
+        model.fit(Xsegment, ysegment)
+    else:
+        model.fit(X_poly, ysegment)
+
+    # Make predictions    
+    inputData = []
+    if (conductLinearRegression):
+        inputData = Xtestsegment
+    else:
+        inputData = X_polytest
+        
+    linregpred = model.predict(inputData)
+    print('prediction')
+    print(linregpred)
+#mse = mean_squared_error(ytestsegment, linregpred)
+#r2 = r2_score(y, linregpred)
+#print(mse)
+#print(r2)
 
 
 
