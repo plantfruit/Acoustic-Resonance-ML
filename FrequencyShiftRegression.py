@@ -9,7 +9,6 @@ from scipy import stats
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.preprocessing import PolynomialFeatures
-from sklearn.preprocessing import PolynomialFeatures
 
 # Data filenames
 frshifts1 = 'Data/data1frshiftm.txt'
