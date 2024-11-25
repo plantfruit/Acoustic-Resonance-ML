@@ -37,6 +37,22 @@ fftPowerDec1stHalf = 'Data/data8FFTdecpowerfirsthalf.txt' # FFT dot products for
 fftPowerInt2ndHalf = 'Data/data10FFTintpower2ndhalf.txt' # FFT dot products for 5 - 9 cm
 fftPowerDec2ndHalf = 'Data/data10FFTdecpower2ndhalf.txt' # FFT dot products for 5.5 - 8.5 cm
 
+# Sine fit parameters (period and phase offset) on the frequency shift curves
+sineFitInt1stHalf = 'Data/data11SineFitInt1stHalf.txt'
+sineFitInt2ndHalf = 'Data/data11SineFitInt2ndHalf.txt'
+sineFitDec1stHalf = 'Data/data11SineFitDec1stHalf.txt'
+sineFitDec2ndHalf = 'Data/data11SineFitDec2ndHalf.txt'
+
+# "Revised" trials by removing outliers 
+sineFitInt1stHalfRe = 'Data/data12SineFitInt1stHalfRe.txt'
+sineFitDec1stHalfRe = 'Data/data12SineFitDec1stHalfRe.txt'
+sineFitInt2ndHalfRe = 'Data/data12SineFitInt2ndHalfRe.txt'
+sineFitDec2ndHalfRe = 'Data/data12SineFitDec2ndHalfRe.txt'
+
+# Spline interpolation FFT values
+interpSplInt1stHalf = 'Data/data13InterSplInt1stHalf.txt'
+interpSplDec1stHalf = 'Data/data13InterSplDec1stHalf.txt'
+
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
 
@@ -49,13 +65,18 @@ testLabelFileName = labelsDec1stHalf
 
 # Newer control parameters
 numReplications = 4
-polynomialRegressionDegree = 4
+polynomialRegressionDegree = 1
 combineVars = False 
 normalizeFeature = True
 conductLinearRegression = False
 normalizeFeature = True
 combineTrainData = trial1
 combineTestData = trial2
+
+# ---------------------------------------------------------------------------------------------
+# 1st stage of hierarchical classifier (Regular, discrete classifier)
+# ---------------------------------------------------------------------------------------------
+
 
 # Read in the csv file that contains all trial data
 # Assumes that the labels and the features are stored in separate files
@@ -129,8 +150,8 @@ print(otherSetPreds)
 # ---------------------------------------------------------------------------------------------
 
 # Read in a different feature set for the hierarchial classifier
-dataFileNameH = frshiftsFirstHalf
-testDataFileNameH = frshiftsDecimalsFirstHalf
+dataFileNameH = fftPowerInt1stHalf
+testDataFileNameH = fftPowerDec1stHalf
 
 X = np.loadtxt(dataFileNameH)
 Xtest = np.loadtxt(testDataFileNameH)
@@ -138,6 +159,9 @@ Xtest = np.loadtxt(testDataFileNameH)
 if (normalizeFeature):
     X = zscore(X)
     Xtest = zscore(Xtest)
+if (X.ndim < 2):
+    X = np.array([X]).T
+    Xtest = np.array([Xtest]).T
 
 # Simplify to just the frequency shift features now (no sign maps)
 poly = PolynomialFeatures(polynomialRegressionDegree)
@@ -156,7 +180,7 @@ for i in range(firstSetPredsDims[0]):
     if (integerPrediction == 1):
         Xsegment = X[0:8,:]
         ysegment = y[0:8]
-        ysegment = [-1,-1,-1,-1,0,0,0,0]
+        ysegment = [0,0,0,0,1,1,1,1]
     elif (integerPrediction == 5):
         Xsegment = X[12:21,:]
         ysegment = y[12:21]
@@ -166,15 +190,18 @@ for i in range(firstSetPredsDims[0]):
         Xsegment = X[(int(integerPrediction) - 2) * 4:(int(integerPrediction) + 1) * 4,:]
         ysegment = y[(int(integerPrediction) - 2) * 4:(int(integerPrediction) + 1) * 4]
         ysegment = [-1,-1,-1,-1,0,0,0,0,1,1,1,1]
-    
 
-    Xtestsegment = Xtest[i, :]
+    Xtestsegment = []
+    if (X.ndim < 2):
+        Xtestsegment = Xtest[i]
+    else:
+        Xtestsegment = Xtest[i, :]
     ytestsegment = ytest[i]
 
     
-    #print(Xsegment)
-    #print(ysegment)
-    #print(Xtestsegment)
+    print(Xsegment)
+    print(ysegment)
+    print(Xtestsegment)
     print("Actual value:")
     print(ytestsegment)    
 
