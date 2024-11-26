@@ -1,4 +1,3 @@
-from ydata_synthetic import TimeGAN
 import numpy as np
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import cross_val_predict
@@ -83,42 +82,21 @@ labelFile = np.loadtxt(labelFileName)
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------
 # Synthetic Data Generation
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------
-
-"""
-    CGAN architecture example file
-"""
+# Import necessary packages
 import pandas as pd
 from sklearn import cluster
 
-from ydata_synthetic.utils.cache import cache_file
+#from ydata_synthetic.utils.cache import cache_file
 from ydata_synthetic.synthesizers import ModelParameters, TrainParameters
 from ydata_synthetic.synthesizers.regular import RegularSynthesizer
 
-#Read the original data and have it preprocessed
-data_path = cache_file('creditcard.csv', 'https://datahub.io/machine-learning/creditcard/r/creditcard.csv')
-data = pd.read_csv(data_path, index_col=[0])
+# Read the datasets from filenames
+dataFile = np.loadtxt(dataFileName)
+labelFile = np.loadtxt(labelFileName)
 
 #Data processing and analysis
-num_cols = list(data.columns[ data.columns != 'Class' ])
+num_cols = dataFile.shape[1] #list(data.columns[ data.columns != 'Class' ])
 cat_cols = []
-
-print('Dataset columns: {}'.format(num_cols))
-sorted_cols = ['V14', 'V4', 'V10', 'V17', 'V12', 'V26', 'Amount', 'V21', 'V8', 'V11', 'V7', 'V28', 'V19',
-                'V3', 'V22', 'V6', 'V20', 'V27', 'V16', 'V13', 'V25', 'V24', 'V18', 'V2', 'V1', 'V5', 'V15',
-                'V9', 'V23', 'Class']
-processed_data = data[ sorted_cols ].copy()
-
-#For the purpose of this example we will only synthesize the minority class
-train_data = processed_data.loc[processed_data['Class'] == 1].copy()
-
-#Create a new class column using KMeans - This will mainly be useful if we want to leverage conditional GAN
-print("Dataset info: Number of records - {} Number of variables - {}".format(train_data.shape[0], train_data.shape[1]))
-algorithm = cluster.KMeans
-args, kwds = (), {'n_clusters':2, 'random_state':0}
-labels = algorithm(*args, **kwds).fit_predict(train_data[ num_cols ])
-
-fraud_w_classes = train_data.copy()
-fraud_w_classes['Class'] = labels
 
 #----------------------------
 #    GAN Training
@@ -156,16 +134,16 @@ fraud_w_classes['Amount'] = pd.cut(fraud_w_classes['Amount'], 5).cat.codes
 synth = RegularSynthesizer(modelname='cgan', model_parameters=gan_args)
 
 #Training the Conditional GAN
-synth.fit(data=fraud_w_classes, label_cols=["Class"], train_arguments=train_args, num_cols=num_cols, cat_cols=cat_cols)
+synth.fit(data= dataFile, label_cols= labelFile, train_arguments=train_args, num_cols=num_cols, cat_cols=cat_cols)
 
 #Saving the synthesizer
-synth.save('creditcard_cgan_model.pkl')
+synth.save('frshInt1stHalf_cgan_model.pkl')
 
 #Loading the synthesizer
-synthesizer = RegularSynthesizer.load('creditcard_cgan_model.pkl')
+synthesizer = RegularSynthesizer.load('frshInt1stHalf_cgan_model.pkl')
 
 #Sampling from the synthesizer
-cond_array = pd.DataFrame(100*[1], columns=['Class'])
+cond_array = pd.DataFrame(100*[1])#, columns=['Class'])
 # Synthesizer samples are returned in the original format (inverse_transform of internal processing already took place)
 sample = synthesizer.sample(cond_array)
 
