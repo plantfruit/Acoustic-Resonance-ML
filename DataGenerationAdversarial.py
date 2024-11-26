@@ -82,69 +82,35 @@ labelFile = np.loadtxt(labelFileName)
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------
 # Synthetic Data Generation
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------
-# Import necessary packages
-import pandas as pd
-from sklearn import cluster
+import numpy as np
+import tensorflow as tf
+from tensorflow.keras import layers
 
-#from ydata_synthetic.utils.cache import cache_file
-from ydata_synthetic.synthesizers import ModelParameters, TrainParameters
-from ydata_synthetic.synthesizers.regular import RegularSynthesizer
+# Generator model for time-series data
+def build_generator():
+    model = tf.keras.Sequential()
+    model.add(layers.LSTM(100, return_sequences=True, input_shape=(30, 1)))
+    model.add(layers.LSTM(50))
+    model.add(layers.Dense(30, activation='linear'))
+    model.add(layers.Reshape((30, 1)))
+    return model
 
-# Read the datasets from filenames
-dataFile = np.loadtxt(dataFileName)
-labelFile = np.loadtxt(labelFileName)
+# Discriminator model for time-series data
+def build_discriminator():
+    model = tf.keras.Sequential()
+    model.add(layers.LSTM(50, return_sequences=True, input_shape=(30, 1)))
+    model.add(layers.LSTM(50))
+    model.add(layers.Dense(1, activation='sigmoid'))
+    return model
 
-#Data processing and analysis
-num_cols = dataFile.shape[1] #list(data.columns[ data.columns != 'Class' ])
-cat_cols = []
+# Compile the models
+generator = build_generator()
+discriminator = build_discriminator()
+discriminator.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-#----------------------------
-#    GAN Training
-#----------------------------
-
-#Define the Conditional GAN and training parameters
-noise_dim = 32
-dim = 128
-batch_size = 128
-beta_1 = 0.5
-beta_2 = 0.9
-
-log_step = 100
-epochs = 2 + 1
-learning_rate = 5e-4
-models_dir = '../cache'
-
-#Test here the new inputs
-gan_args = ModelParameters(batch_size=batch_size,
-                           lr=learning_rate,
-                           betas=(beta_1, beta_2),
-                           noise_dim=noise_dim,
-                           layers_dim=dim)
-
-train_args = TrainParameters(epochs=epochs,
-                             cache_prefix='',
-                             sample_interval=log_step,
-                             label_dim=-1,
-                             labels=(0,1))
-
-#create a bining
-fraud_w_classes['Amount'] = pd.cut(fraud_w_classes['Amount'], 5).cat.codes
-
-#Init the Conditional GAN providing the index of the label column as one of the arguments
-synth = RegularSynthesizer(modelname='cgan', model_parameters=gan_args)
-
-#Training the Conditional GAN
-synth.fit(data= dataFile, label_cols= labelFile, train_arguments=train_args, num_cols=num_cols, cat_cols=cat_cols)
-
-#Saving the synthesizer
-synth.save('frshInt1stHalf_cgan_model.pkl')
-
-#Loading the synthesizer
-synthesizer = RegularSynthesizer.load('frshInt1stHalf_cgan_model.pkl')
-
-#Sampling from the synthesizer
-cond_array = pd.DataFrame(100*[1])#, columns=['Class'])
-# Synthesizer samples are returned in the original format (inverse_transform of internal processing already took place)
-sample = synthesizer.sample(cond_array)
-
-print(sample)
+# Combine the models
+discriminator.trainable = False
+gan_input = dataFile #layers.Input(shape=(30, 1))
+gan_output = discriminator(generator(gan_input))
+gan = tf.keras.Model(gan_input, gan_output)
+gan.compile(optimizer='adam', loss='binary_crossentropy')
