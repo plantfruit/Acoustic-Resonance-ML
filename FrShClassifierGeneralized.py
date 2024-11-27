@@ -47,7 +47,7 @@ testDataFileName = frshIntDec1stHalf
 labelFileName = labelsIntDec1stHalf
 testLabelFileName = labelsIntDec1stHalf
 
-numReplications = 4
+numReplications = 2
 combineVars = False
 normalizeFeature = True
 combineTrainData = trial1
@@ -110,9 +110,18 @@ print(otherSetLabels)
 knnCV = KNeighborsClassifier(n_neighbors=numReplications)
 
 # Perform cross-validated predictions
-y_pred = cross_val_predict(knnCV, X, y, cv=numReplications)
+y_pred = []
+try: 
+    y_pred = cross_val_predict(knnCV, X, y, cv=numReplications)
+# Sometimes we want to force the classifier to consider decimal values as labels. It will present a ValueError when we do that.
+# Catch the error and convert labels to strings as necessary.
+except:
+    y_discrete = [str(label) for label in y]
+    y_pred = cross_val_predict(knnCV, X, y_discrete, cv=numReplications)
 
 # Calculate and display the accuracy score
+y = [str(label) for label in y]
+y_pred = [str(label) for label in y_pred]
 accuracy = accuracy_score(y, y_pred)
 
 print(accuracy)
@@ -128,7 +137,7 @@ knn.fit(X, y)
 ##print(accuracy2)
 
 # Calculate the confusion matrix for cross-validated test
-cmlabels = [1,2,3,4,5,6,7,8,9]
+cmlabels = [1,1.5,2,2.5,3,3.5,4,4.5,5,5.5] #[1,2,3,4,5,6,7,8,9]
 conf_matrix = confusion_matrix(y, y_pred)
 # Plot the confusion matrix
 disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix)
