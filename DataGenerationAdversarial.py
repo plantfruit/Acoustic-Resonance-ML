@@ -86,31 +86,71 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras import layers
 
+# GAN code source: https://medium.com/@subramanian.m1/using-generative-ai-with-python-to-generate-synthetic-data-030284ef990e
+
 # Generator model for time-series data
-def build_generator():
+def build_generator(inputData):
+    # Grab dimensions of our dataset, for use in defining input shape
+    inputDataDims = inputData.shape
+    
     model = tf.keras.Sequential()
-    model.add(layers.LSTM(100, return_sequences=True, input_shape=(30, 1)))
+    model.add(layers.LSTM(100, return_sequences=True, input_shape=(inputDataDims[0], inputDataDims[1])))
     model.add(layers.LSTM(50))
-    model.add(layers.Dense(30, activation='linear'))
-    model.add(layers.Reshape((30, 1)))
+    model.add(layers.Dense(inputDataDims[0]*inputDataDims[1], activation='linear'))
+    model.add(layers.Reshape((inputDataDims[0], inputDataDims[1])))
     return model
 
 # Discriminator model for time-series data
-def build_discriminator():
+def build_discriminator(inputData):
+    # Grab dimensions of our dataset, for use in defining input shape
+    inputDataDims = inputData.shape
+    
     model = tf.keras.Sequential()
-    model.add(layers.LSTM(50, return_sequences=True, input_shape=(30, 1)))
+    model.add(layers.LSTM(50, return_sequences=True, input_shape=(inputDataDims[0], inputDataDims[1])))
     model.add(layers.LSTM(50))
-    model.add(layers.Dense(1, activation='sigmoid'))
+    model.add(layers.Dense(inputDataDims[1], activation='sigmoid'))
     return model
 
 # Compile the models
-generator = build_generator()
-discriminator = build_discriminator()
+generator = build_generator(dataFile)
+discriminator = build_discriminator(dataFile)
 discriminator.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
 # Combine the models
+dataFileDims = dataFile.shape
+
 discriminator.trainable = False
-gan_input = dataFile #layers.Input(shape=(30, 1))
+gan_input = layers.Input(shape=(dataFileDims[0], dataFileDims[1]))
 gan_output = discriminator(generator(gan_input))
 gan = tf.keras.Model(gan_input, gan_output)
 gan.compile(optimizer='adam', loss='binary_crossentropy')
+
+# After creating the GAN model, train it with our selected data 
+
+# Training loop
+def train_gan(inputData, generator, discriminator, gan, epochs=1000):
+    inputDataDims = inputData.shape
+    batch_size = inputDataDims[0]*inputDataDims[1]    
+    
+    for epoch in range(epochs):
+        # Generate real and fake data
+        real_data = inputData
+        noise = np.random.normal(np.min(inputData), np.max(inputData), (batch_size, inputDataDims[0], inputDataDims[1]))
+        fake_data = generator.predict(noise)
+        
+        # Train discriminator
+        d_loss_real = discriminator.train_on_batch(real_data, np.ones((inputDataDims[0], 1)))
+        d_loss_fake = discriminator.train_on_batch(fake_data, np.zeros((inputDataDims[0], 1)))
+        d_loss = 0.5 * np.add(d_loss_real, d_loss_fake)
+        
+        # Train generator
+        noise = np.random.normal(0, 1, (batch_size, inputDataDims[0], inputDataDims[1]))
+        valid_y = np.array([1] * batch_size)
+        g_loss = gan.train_on_batch(noise, valid_y)
+        
+        # Print the progress
+        if epoch % 100 == 0:
+            print(f"{epoch} [D loss: {d_loss[0]}, acc.: {100*d_loss[1]}%] [G loss: {g_loss}]")
+
+# Train the GAN
+train_gan(dataFile, generator, discriminator, gan)
