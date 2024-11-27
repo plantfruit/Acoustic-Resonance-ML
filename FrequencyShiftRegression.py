@@ -55,6 +55,10 @@ sineFitDec2ndHalfRe = 'Data/data12SineFitDec2ndHalfRe.txt'
 interpSplInt1stHalf = 'Data/data13InterSplInt1stHalf.txt'
 interpSplDec1stHalf = 'Data/data13InterSplDec1stHalf.txt'
 
+# Decimals and integers merged into 1 big table
+frshIntDecAll = 'Data/data16frshIntDecAll.txt'
+frshIntDecAllLabels = 'Data/data16labels.txt'
+
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
 
@@ -67,11 +71,11 @@ leaveOut = 2
 removeCols = []
 
 # Filenames that are going to be used
-dataFileName = interpSplInt1stHalf
-testDataFileName = interpSplDec1stHalf
+dataFileName = frshIntDecAll
+testDataFileName = frshIntDecAll
 
-labelFileName = labelsInt1stHalf
-testLabelFileName = labelsDec1stHalf
+labelFileName = frshIntDecAllLabels
+testLabelFileName = frshIntDecAllLabels
 
 # Newer control parameters
 numReplications = 4
