@@ -36,16 +36,24 @@ fftPowerDec2ndHalf = 'Data/data10FFTdecpower2ndhalf.txt' # FFT dot products for 
 # Merged the integer and decimal distances' frequency shifts for 1 - 5.5 cm
 frshIntDec1stHalf = 'Data/data14frshIntDec1stHalf.txt'
 labelsIntDec1stHalf = 'Data/data14labels.txt'
+frshIntDec2ndHalf = 'Data/data15frshIntDec2ndHalf.txt'
+labelsIntDec2ndHalf = 'Data/data15labels.txt'
 
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
 
-# Filenames that are going to be used
-dataFileName = frshIntDec1stHalf
-testDataFileName = frshIntDec1stHalf
+# SELECT FILENAMES FOR ANALYSIS
+dataFileName = frshIntDec2ndHalf
+testDataFileName = labelsIntDec2ndHalf
 
 labelFileName = labelsIntDec1stHalf
 testLabelFileName = labelsIntDec1stHalf
+
+# CHOOSE CONFUSION MATRIX LABEL
+tube10cmInts = [1,2,3,4,5,6,7,8,9]
+tube10cmIntDec1stHalf = [1,1.5,2,2.5,3,3.5,4,4.5,5,5.5]
+tube10cmIntDec2ndHalf = [5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9]
+cmlabels = tube10cmIntDec2ndHalf
 
 numReplications = 2
 combineVars = False
@@ -137,7 +145,7 @@ knn.fit(X, y)
 ##print(accuracy2)
 
 # Calculate the confusion matrix for cross-validated test
-cmlabels = [1,1.5,2,2.5,3,3.5,4,4.5,5,5.5] #[1,2,3,4,5,6,7,8,9]
+
 conf_matrix = confusion_matrix(y, y_pred)
 # Plot the confusion matrix
 disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix)

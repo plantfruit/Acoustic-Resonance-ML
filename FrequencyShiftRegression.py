@@ -180,6 +180,7 @@ else:
     inputData = X_polytest
     
 linregpred = model.predict(inputData)
+print('Predictions')
 print(linregpred)
 mse = mean_squared_error(ytest, linregpred)
 #r2 = r2_score(y, linregpred)
