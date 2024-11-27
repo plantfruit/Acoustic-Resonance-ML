@@ -33,15 +33,19 @@ fftPowerDec1stHalf = 'Data/data8FFTdecpowerfirsthalf.txt' # FFT dot products for
 fftPowerInt2ndHalf = 'Data/data10FFTintpower2ndhalf.txt' # FFT dot products for 5 - 9 cm
 fftPowerDec2ndHalf = 'Data/data10FFTdecpower2ndhalf.txt' # FFT dot products for 5.5 - 8.5 cm
 
+# Merged the integer and decimal distances' frequency shifts for 1 - 5.5 cm
+frshIntDec1stHalf = 'Data/data14frshIntDec1stHalf.txt'
+labelsIntDec1stHalf = 'Data/data14labels.txt'
+
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
 
 # Filenames that are going to be used
-dataFileName = fftPowerInt1stHalf
-testDataFileName = fftPowerDec1stHalf
+dataFileName = frshIntDec1stHalf
+testDataFileName = frshIntDec1stHalf
 
-labelFileName = labelsInt1stHalf
-testLabelFileName = labelsDec1stHalf
+labelFileName = labelsIntDec1stHalf
+testLabelFileName = labelsIntDec1stHalf
 
 numReplications = 4
 combineVars = False
