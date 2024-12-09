@@ -44,13 +44,15 @@ pressEntireFFT = 'Data/data17pressEntireFFT.txt'
 pressEntireFFTLabels = 'Data/data17labels.txt'
 # pwelch of above data, with window of 64
 pwelchEntireFFT = 'Data/data18pwelchEntireFFT.txt'
+# Same thing as above, but the FFT has been windowed to just the "area of interest" (first third or so of data, showing all resonance peaks)
+pressWindowedFFT = 'Data/data19pressFFTWindowed.txt'
 
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
 fftPwelch = [pressEntireFFT, pwelchEntireFFT]
 
 # SELECT FILENAMES FOR ANALYSIS
-dataFileName = pressEntireFFT
+dataFileName = pressWindowedFFT
 testDataFileName = frshIntDec2ndHalf
 
 labelFileName = pressEntireFFTLabels
