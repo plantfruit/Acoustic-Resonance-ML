@@ -71,17 +71,17 @@ leaveOut = 2
 removeCols = []
 
 # Filenames that are going to be used
-dataFileName = frshIntDecAll
-testDataFileName = frshIntDecAll
+dataFileName = fftPowerInt2ndHalf
+testDataFileName = fftPowerDec2ndHalf
 
-labelFileName = frshIntDecAllLabels
-testLabelFileName = frshIntDecAllLabels
+labelFileName = labelsInt2ndHalf
+testLabelFileName = labelsDec2ndHalf
 
 # Newer control parameters
 numReplications = 4
-polynomialRegressionDegree = 4
+polynomialRegressionDegree = 2
 combineVars = False 
-normalizeFeature = True
+normalizeFeature = False
 conductLinearRegression = False
 combineTrainData = frshFFTPow2ndHalf#trial1
 combineTestData = frshFFTPow2ndHalfTest #trial2

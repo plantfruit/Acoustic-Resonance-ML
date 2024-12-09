@@ -39,21 +39,26 @@ labelsIntDec1stHalf = 'Data/data14labels.txt'
 frshIntDec2ndHalf = 'Data/data15frshIntDec2ndHalf.txt'
 labelsIntDec2ndHalf = 'Data/data15labels.txt'
 
+# Entire FFT values during press-down stage
+pressEntireFFT = 'Data/data17pressEntireFFT.txt'
+pressEntireFFTLabels = 'Data/data17labels.txt'
+
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
 
 # SELECT FILENAMES FOR ANALYSIS
-dataFileName = frshIntDec2ndHalf
-testDataFileName = labelsIntDec2ndHalf
+dataFileName = pressEntireFFT
+testDataFileName = frshIntDec2ndHalf
 
-labelFileName = labelsIntDec1stHalf
-testLabelFileName = labelsIntDec1stHalf
+labelFileName = pressEntireFFTLabels
+testLabelFileName = labelsIntDec2ndHalf
 
 # CHOOSE CONFUSION MATRIX LABEL
 tube10cmInts = [1,2,3,4,5,6,7,8,9]
 tube10cmIntDec1stHalf = [1,1.5,2,2.5,3,3.5,4,4.5,5,5.5]
 tube10cmIntDec2ndHalf = [5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9]
-cmlabels = tube10cmIntDec2ndHalf
+tube10cmIntDec = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9]
+cmlabels = tube10cmIntDec
 
 numReplications = 2
 combineVars = False
