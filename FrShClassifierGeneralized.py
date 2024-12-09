@@ -39,12 +39,15 @@ labelsIntDec1stHalf = 'Data/data14labels.txt'
 frshIntDec2ndHalf = 'Data/data15frshIntDec2ndHalf.txt'
 labelsIntDec2ndHalf = 'Data/data15labels.txt'
 
-# Entire FFT values during press-down stage
+# Entire FFT values during press-down stage, for 1 - 9 cm, 0.5 intervals (so basically all the possible distances)
 pressEntireFFT = 'Data/data17pressEntireFFT.txt'
 pressEntireFFTLabels = 'Data/data17labels.txt'
+# pwelch of above data, with window of 64
+pwelchEntireFFT = 'Data/data18pwelchEntireFFT.txt'
 
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
+fftPwelch = [pressEntireFFT, pwelchEntireFFT]
 
 # SELECT FILENAMES FOR ANALYSIS
 dataFileName = pressEntireFFT
@@ -60,10 +63,11 @@ tube10cmIntDec2ndHalf = [5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9]
 tube10cmIntDec = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9]
 cmlabels = tube10cmIntDec
 
-numReplications = 2
+# CLASSIFICATION PARAMETERS
+numReplications = 5
 combineVars = False
 normalizeFeature = True
-combineTrainData = trial1
+combineTrainData = fftPwelch
 combineTestData = trial2
 
 # Read in the csv file that contains all trial data
