@@ -59,6 +59,12 @@ interpSplDec1stHalf = 'Data/data13InterSplDec1stHalf.txt'
 frshIntDecAll = 'Data/data16frshIntDecAll.txt'
 frshIntDecAllLabels = 'Data/data16labels.txt'
 
+# Direct FFT values during pressdown stage, windowed to the resonance range, separated in 2 datasets, one for integer distances and the other for decimal distances
+pressFFTInt = 'Data/data20pressFFTint.txt'
+pressFFTIntLabels = 'Data/data20labels.txt'
+pressFFTDec = 'Data/data21pressFFTDec.txt'
+pressFFTDecLabels = 'Data/data21labels.txt'
+
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
 
@@ -71,17 +77,17 @@ leaveOut = 2
 removeCols = []
 
 # Filenames that are going to be used
-dataFileName = fftPowerInt2ndHalf
-testDataFileName = fftPowerDec2ndHalf
+dataFileName = pressFFTInt
+testDataFileName = pressFFTDec
 
-labelFileName = labelsInt2ndHalf
-testLabelFileName = labelsDec2ndHalf
+labelFileName = pressFFTIntLabels
+testLabelFileName = pressFFTDecLabels
 
 # Newer control parameters
-numReplications = 4
-polynomialRegressionDegree = 2
+numReplications = 5
+polynomialRegressionDegree = 3
 combineVars = False 
-normalizeFeature = False
+normalizeFeature = True
 conductLinearRegression = False
 combineTrainData = frshFFTPow2ndHalf#trial1
 combineTestData = frshFFTPow2ndHalfTest #trial2
