@@ -47,15 +47,20 @@ pwelchEntireFFT = 'Data/data18pwelchEntireFFT.txt'
 # Same thing as above, but the FFT has been windowed to just the "area of interest" (first third or so of data, showing all resonance peaks)
 pressWindowedFFT = 'Data/data19pressFFTWindowed.txt'
 
+# Balloon test, 3 points on a diagonal. Press FFT, windowed smooth
+bal1 = 'Data/bal1.txt'
+# Just 1, 2, and 3
+bal1labels = 'Data/bal1labels.txt'
+
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
 fftPwelch = [pressEntireFFT, pwelchEntireFFT]
 
 # SELECT FILENAMES FOR ANALYSIS
-dataFileName = pressWindowedFFT
+dataFileName = bal1
 testDataFileName = frshIntDec2ndHalf
 
-labelFileName = pressEntireFFTLabels
+labelFileName = bal1labels
 testLabelFileName = labelsIntDec2ndHalf
 
 # CHOOSE CONFUSION MATRIX LABEL
@@ -63,7 +68,8 @@ tube10cmInts = [1,2,3,4,5,6,7,8,9]
 tube10cmIntDec1stHalf = [1,1.5,2,2.5,3,3.5,4,4.5,5,5.5]
 tube10cmIntDec2ndHalf = [5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9]
 tube10cmIntDec = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9]
-cmlabels = tube10cmIntDec
+balloonTestLabels = [1, 2, 3]
+cmlabels = balloonTestLabels
 
 # CLASSIFICATION PARAMETERS
 numReplications = 5
