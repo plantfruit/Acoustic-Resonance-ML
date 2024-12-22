@@ -51,16 +51,21 @@ pressWindowedFFT = 'Data/data19pressFFTWindowed.txt'
 bal1 = 'Data/bal1.txt'
 # Just 1, 2, and 3
 bal1labels = 'Data/bal1labels.txt'
+# Follow up to the balloon test, this time with a 3x3 grid
+bal2 = 'Data/bal2.txt'
+bal2labels = 'Data/bal2labels.txt'
+bal2cols1to150 = 'Data/bal2cols1to150.txt'
+bal2labelsSimplified = 'Data/bal2labelssimplified.txt'
 
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
 fftPwelch = [pressEntireFFT, pwelchEntireFFT]
 
 # SELECT FILENAMES FOR ANALYSIS
-dataFileName = bal1
+dataFileName = bal2cols1to150
 testDataFileName = frshIntDec2ndHalf
 
-labelFileName = bal1labels
+labelFileName = bal2labels
 testLabelFileName = labelsIntDec2ndHalf
 
 # CHOOSE CONFUSION MATRIX LABEL
@@ -69,7 +74,7 @@ tube10cmIntDec1stHalf = [1,1.5,2,2.5,3,3.5,4,4.5,5,5.5]
 tube10cmIntDec2ndHalf = [5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9]
 tube10cmIntDec = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9]
 balloonTestLabels = [1, 2, 3]
-cmlabels = balloonTestLabels
+cmlabels = tube10cmInts
 
 # CLASSIFICATION PARAMETERS
 numReplications = 5
