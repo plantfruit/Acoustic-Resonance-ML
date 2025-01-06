@@ -57,12 +57,15 @@ bal2labels = 'Data/bal2labels.txt'
 bal2cols1to150 = 'Data/bal2cols1to150.txt'
 bal2labelsSimplified = 'Data/bal2labelssimplified.txt'
 
+# Drum test, 3 x 3 points on flat 2D surface
+drum1 = 'Data/drum1.txt'
+
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
 fftPwelch = [pressEntireFFT, pwelchEntireFFT]
 
 # SELECT FILENAMES FOR ANALYSIS
-dataFileName = bal2cols1to150
+dataFileName = drum1
 testDataFileName = frshIntDec2ndHalf
 
 labelFileName = bal2labels
@@ -90,6 +93,7 @@ labelFile = np.loadtxt(labelFileName)
 testFile = np.loadtxt(testDataFileName)
 otherSetLabels = np.loadtxt(testLabelFileName)
 
+#print(dataFile)
 X = []
 # Load and process the data
 if (combineVars): # Combine multiple variable tables into 1 big table 
