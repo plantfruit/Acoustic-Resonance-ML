@@ -56,20 +56,22 @@ bal2 = 'Data/bal2.txt'
 bal2labels = 'Data/bal2labels.txt'
 bal2cols1to150 = 'Data/bal2cols1to150.txt'
 bal2labelsSimplified = 'Data/bal2labelssimplified.txt'
+bal3 = 'Data/bal3.txt'
 
 # Drum test, 3 x 3 points on flat 2D surface
 drum1 = 'Data/drum1.txt'
+drum2 = 'Data/drum2.txt' # Different balloon
 
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
 fftPwelch = [pressEntireFFT, pwelchEntireFFT]
 
 # SELECT FILENAMES FOR ANALYSIS
-dataFileName = drum1
-testDataFileName = frshIntDec2ndHalf
+dataFileName = bal2
+testDataFileName = drum2
 
 labelFileName = bal2labels
-testLabelFileName = labelsIntDec2ndHalf
+testLabelFileName = bal2labels
 
 # CHOOSE CONFUSION MATRIX LABEL
 tube10cmInts = [1,2,3,4,5,6,7,8,9]
@@ -93,7 +95,8 @@ labelFile = np.loadtxt(labelFileName)
 testFile = np.loadtxt(testDataFileName)
 otherSetLabels = np.loadtxt(testLabelFileName)
 
-#print(dataFile)
+print(dataFileName)
+print(dataFile)
 X = []
 # Load and process the data
 if (combineVars): # Combine multiple variable tables into 1 big table 
@@ -187,7 +190,10 @@ otherSetPreds = knn.predict(Xtest)
 #otherSetAccuracy = accuracy_score(otherSetLabels, otherSetPreds)
 print("Test Dataset KNN Accuracy")
 #print(otherSetAccuracy)
+accuracy2 = accuracy_score(y, otherSetPreds)
+print(accuracy2)
 print(otherSetPreds)
+
 ### Calculate the confusion matrix
 ##cmlabels_test = cmlabels
 ##conf_matrix_test = confusion_matrix(otherSetLabels, otherSetPreds)
