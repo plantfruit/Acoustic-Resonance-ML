@@ -62,12 +62,27 @@ bal3 = 'Data/bal3.txt'
 drum1 = 'Data/drum1.txt'
 drum2 = 'Data/drum2.txt' # Different balloon
 
+# Grip, it's a smaller version of the drum, intended for attachment on the robotic arm, 3x3 points on flat 2D surface
+grip1 = 'Data/grip1.txt'
+grip1_FFT2ndHalf = 'Data/grip1_FFT2ndhalf.txt' # Just the messy rectangle at back
+grip1_FFT2ndHalfv2 = 'Data/grip1_FFT2ndhalfexpanded.txt' # # Includes trough in front of messy rectangle
+grip1_FFT2ndHalfv3 = 'Data/grip1_FFT2ndhalf_v3.txt' # Second peak and messy rectangle at back
+grip1smooth5 = 'Data/grip1smooth5.txt' # Full spectrum, but now smoothing factor bumped up to 5
+grip1smooth5_CZ = 'Data/grip1smooth5_CZ.txt'
+grip1_CZ = 'Data/grip1_CZ.txt' # Back to the original smoothing factor of 3
+grip1_EV = 'Data/grip1_EV.txt'
+grip1_EVsquared = 'Data/grip1_EVsquared.txt'
+grip1_FN = 'Data/grip1_FN.txt'
+grip1_FNendnoisecropped = 'Data/grip1_FNendnoisecropped.txt'
+grip1_FNencrop_cubed = 'Data/grip1_FNencrop_cubed.txt'
+grip1_FNencrop_squared = 'Data/grip1_FNencrop_squared.txt'
+
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
 fftPwelch = [pressEntireFFT, pwelchEntireFFT]
 
 # SELECT FILENAMES FOR ANALYSIS
-dataFileName = bal2
+dataFileName = grip1_FNencrop_squared
 testDataFileName = drum2
 
 labelFileName = bal2labels
