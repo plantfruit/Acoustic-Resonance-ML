@@ -56,16 +56,20 @@ bal2 = 'Data/bal2.txt'
 bal2labels = 'Data/bal2labels.txt'
 bal2cols1to150 = 'Data/bal2cols1to150.txt'
 bal2labelsSimplified = 'Data/bal2labelssimplified.txt'
+# 3x3 grid, balloon base plate, new speaker (louder, stronger signal), reduced diameter balloon disk
+bal3 = 'Data/bal3.txt' 
+bal3force = 'Data/bal3force.txt' # Force, 0 cm push, 2 - 6 cm push on the middle point of 3x3
+bal3forceLabels = 'Data/bal3forcelabels.txt'
 
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
 fftPwelch = [pressEntireFFT, pwelchEntireFFT]
 
 # SELECT FILENAMES FOR ANALYSIS
-dataFileName = bal2cols1to150
+dataFileName = bal3force
 testDataFileName = frshIntDec2ndHalf
 
-labelFileName = bal2labels
+labelFileName = bal3forceLabels
 testLabelFileName = labelsIntDec2ndHalf
 
 # CHOOSE CONFUSION MATRIX LABEL
@@ -74,7 +78,8 @@ tube10cmIntDec1stHalf = [1,1.5,2,2.5,3,3.5,4,4.5,5,5.5]
 tube10cmIntDec2ndHalf = [5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9]
 tube10cmIntDec = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9]
 balloonTestLabels = [1, 2, 3]
-cmlabels = tube10cmInts
+balloonForceLabels = [0, 2, 3, 4, 5, 6]
+cmlabels = balloonForceLabels
 
 # CLASSIFICATION PARAMETERS
 numReplications = 5
