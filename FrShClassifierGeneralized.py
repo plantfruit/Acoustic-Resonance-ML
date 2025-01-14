@@ -5,6 +5,10 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, accuracy_s
 import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.stats import zscore
+import os
+
+# Fix bug about "UserWarning: Could not find the number of physical cores for the following reason: [WinError 2] The system cannot find the file specified"
+os.environ['OMP_NUM_THREADS'] = '1'
 
 frshifts1 = 'Data/data1frshiftm.txt'
 labels1 = 'Data/data1labelsm.txt'
@@ -76,13 +80,17 @@ grip1_FN = 'Data/grip1_FN.txt'
 grip1_FNendnoisecropped = 'Data/grip1_FNendnoisecropped.txt'
 grip1_FNencrop_cubed = 'Data/grip1_FNencrop_cubed.txt'
 grip1_FNencrop_squared = 'Data/grip1_FNencrop_squared.txt'
+grip2 = 'Data/grip2.txt' # Different balloon, wrapped over entire attachment this time
+
+# 3 microphone setup, like the drum, but with 3 microphones embedded inside, still a 3 x 3 grid though
+trimic1 = 'Data/trimic1.txt'
 
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
 fftPwelch = [pressEntireFFT, pwelchEntireFFT]
 
 # SELECT FILENAMES FOR ANALYSIS
-dataFileName = grip1_FNencrop_squared
+dataFileName = trimic1
 testDataFileName = drum2
 
 labelFileName = bal2labels
