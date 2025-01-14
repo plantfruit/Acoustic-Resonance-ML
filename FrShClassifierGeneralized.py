@@ -84,16 +84,18 @@ grip2 = 'Data/grip2.txt' # Different balloon, wrapped over entire attachment thi
 
 # 3 microphone setup, like the drum, but with 3 microphones embedded inside, still a 3 x 3 grid though
 trimic1 = 'Data/trimic1.txt'
+trimic1_4corners = 'Data/trimic1_4corners.txt'
+trimic1_4corners_labels = 'Data/trimic1_4corners_labels.txt'
 
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
 fftPwelch = [pressEntireFFT, pwelchEntireFFT]
 
 # SELECT FILENAMES FOR ANALYSIS
-dataFileName = trimic1
+dataFileName = trimic1_4corners
 testDataFileName = drum2
 
-labelFileName = bal2labels
+labelFileName = trimic1_4corners_labels
 testLabelFileName = bal2labels
 
 # CHOOSE CONFUSION MATRIX LABEL
