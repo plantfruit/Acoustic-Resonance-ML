@@ -86,13 +86,17 @@ grip2 = 'Data/grip2.txt' # Different balloon, wrapped over entire attachment thi
 trimic1 = 'Data/trimic1.txt'
 trimic1_4corners = 'Data/trimic1_4corners.txt'
 trimic1_4corners_labels = 'Data/trimic1_4corners_labels.txt'
+trimic1_2corners = 'Data/trimic1_topleft_bottomright.txt' # First microphone
+trimic1_2corners_allmics = 'Data/trimic1_topleft_bottomright_allmics.txt' # All 3 microphones
+trimic1_2corners_labels = 'Data/trimic1_topleft_bottomright_labels.txt'
+trimic1_4corners_1mic = 'Data/trimic1_4corners_1mic.txt'
 
 trial1 = [frshifts1, frshsigns, pressAmplitudes]
 trial2 = [frshifts2, frshsigns2, pressAmplitudes2]
 fftPwelch = [pressEntireFFT, pwelchEntireFFT]
 
 # SELECT FILENAMES FOR ANALYSIS
-dataFileName = trimic1_4corners
+dataFileName = trimic1_4corners_1mic
 testDataFileName = drum2
 
 labelFileName = trimic1_4corners_labels
