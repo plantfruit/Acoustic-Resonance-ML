@@ -20,31 +20,28 @@ mic1_2 = 'Data/trimic1_2.txt'
 mic1_3 = 'Data/trimic1_3.txt'
 grid9_5samples = 'Data/bal2labels.txt'
 
-trimic1 = 'Data/5by5_trimic1.txt'
+trimic1 = 'Data/5by5_trimic1.txt' # 20 pulses per file
+trimic1duplicate = 'Data/5by5_trimic1_possibleduplicate.txt'
 trimic1labels = 'Data/5by5_trimic1_labels.txt'
-
+trimic1re = 'Data/5x5_trimic1_re.txt' # Only 10 pulses per file
+trimic1relabels = 'Data/5by5_trimic1_re_labels.txt'
 
 
 # SELECT FILENAMES FOR ANALYSIS
-fileName = trimic1
+fileName = trimic1re
 
-labelFileName = trimic1labels
+labelFileName = trimic1relabels
 
-labelFile = np.loadtxt(labelFileName)
-
-# Stack them along a new axis (axis=1) to create a 3D array
-X = np.loadtxt(trimic1)
+# Read features and labels
+X = np.loadtxt(fileName)
 print(np.shape(X))
-
-
-# Example labels (binary classification in this case)
-y = labelFile
+y = np.loadtxt(labelFileName)
 
 # Reshape the 3D data to 2D (num_samples, num_channels * num_features)
 X_reshaped = X
 
 
-
+# CROSS-VALIDATED CLASSIFICATION
 # Initialize the SVM classifier
 svm_model = SVC(kernel='linear')  # You can change kernel here (e.g., 'rbf', 'poly')
 
@@ -56,18 +53,17 @@ predictions = cross_val_predict(svm_model, X_reshaped, y, cv=5)
 #    print(f"Sample {i+1} - Predicted: {predictions[i]}, True: {y[i]}")
 
 # Perform 5-fold cross-validation
-cv_scores = cross_val_score(svm_model, X_reshaped, y, cv=5)
+accuracy = accuracy_score(y, predictions)
+#cv_scores = cross_val_score(svm_model, X_reshaped, y, cv=5)
 
-# Print the accuracy for each fold
-print(f"Accuracy for each fold: {cv_scores}")
 
-# Print the average accuracy across all folds
-print(f"Average cross-validation accuracy: {cv_scores.mean() * 100:.2f}%")
+# Print the accuracy
+print(accuracy)
+#print(f"Accuracy for each fold: {cv_scores}")
+#print(f"Average cross-validation accuracy: {cv_scores.mean() * 100:.2f}%")
 
 # Generate the confusion matrix
 cm = confusion_matrix(y, predictions)
-
-# Visualize the confusion matrix using seaborn heatmap
 plt.figure(figsize=(8, 6))
 sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=np.arange(1, 26), yticklabels=np.arange(1, 26))
 plt.title('Confusion Matrix')
@@ -82,7 +78,7 @@ X_train, X_test, y_train, y_test = train_test_split(X_reshaped, y, test_size=0.2
 svm_model = SVC(kernel='linear')  # You can change kernel here (e.g., 'rbf', 'poly')
 
 
-
+# REGULAR CLASSIFICATION
 # Train the SVM model
 svm_model.fit(X_train, y_train)
 
@@ -95,8 +91,6 @@ print(f"Test accuracy: {accuracy * 100:.2f}%")
 
 # Generate the confusion matrix
 cm = confusion_matrix(y_test, y_pred)
-
-# Visualize the confusion matrix using seaborn heatmap
 plt.figure(figsize=(8, 6))
 sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=np.arange(1, 10), yticklabels=np.arange(1, 10))
 plt.title('Confusion Matrix')
