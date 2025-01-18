@@ -37,41 +37,39 @@ y = np.loadtxt(labelFileName)
 
 X_reshaped = X
 
-# Create an array of group indices (0, 1, 2, ..., num_groups - 1)
-num_groups = 250  # Number of groups
-files_per_group = 10  # Files per group
-total_samples = num_groups * files_per_group
-group_indices = np.repeat(np.arange(num_groups), files_per_group)
+# Dataset Parameters
+num_labels = 25
+files_per_label = 10
+rows_per_file = 100
+total_files = num_labels * files_per_label
+total_rows = total_files * rows_per_file
 
-# Split the data at the group level
-from sklearn.model_selection import train_test_split
+# Train-test split: First 80 rows/train, last 20 rows/test per label
+train_indices = []
+test_indices = []
 
-# Split group indices into train and test groups
-train_groups, test_groups = train_test_split(
-    np.unique(group_indices), test_size=0.2
-)
-# , random_state=10 seed works for fully distributing the test class from 1 to 25
-print(train_groups.tolist())
-print(test_groups.tolist())
+for label in range(1, num_labels + 1):
+    # Get all rows for this label
+    label_rows = np.where(y == label)[0]
 
-# Filter data by group
-# group_indices will always be larger than the 2nd parameter.
-# So isin will "detect" which of the group indices have been placed in the train group
-# and which have been placed in the test group.
-train_mask = np.isin(group_indices, train_groups)
-test_mask = np.isin(group_indices, test_groups)
-print(train_mask.tolist())
-print(test_mask.tolist())
+    # Split the indices: first 80 for training, last 20 for testing
+    #train_indices.extend(label_rows[:80])
+    #test_indices.extend(label_rows[80:])
+    
+    # Split the indices: 
+    # First 20 rows and last 60 rows for training
+    train_indices.extend(label_rows[:20])
+    train_indices.extend(label_rows[40:])
+    # 2nd set of 20 rows for testing
+    test_indices.extend(label_rows[20:40])
 
-# Using our knowledge of which group of indices is present in which class (train or test),
-# we can form the train and test classes, but now they're organized by groups of
-# pulses.
-X_train, X_test = X_reshaped[train_mask], X_reshaped[test_mask]
-#print(X_train.tolist())
-#print(X_test.tolist())
-y_train, y_test = y[train_mask], y[test_mask]
-print(y_train.tolist())
-print(y_test.tolist())
+# Convert to arrays for indexing
+train_indices = np.array(train_indices)
+test_indices = np.array(test_indices)
+
+# Split the dataset
+X_train, X_test = X_reshaped[train_indices], X_reshaped[test_indices]
+y_train, y_test = y[train_indices], y[test_indices]
 
 # Train the SVM model
 svm_model = SVC(kernel='linear')  # You can change kernel here (e.g., 'rbf', 'poly')
@@ -79,7 +77,6 @@ svm_model.fit(X_train, y_train)
 
 # Make predictions on the test set
 y_pred = svm_model.predict(X_test)
-print(y_pred.tolist())
 
 # Calculate the accuracy of the predictions
 accuracy = accuracy_score(y_test, y_pred)
@@ -87,8 +84,10 @@ print(f"Test accuracy: {accuracy * 100:.2f}%")
 
 # Generate the confusion matrix
 cm = confusion_matrix(y_test, y_pred)
-plt.figure(figsize=(8, 6))
-sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=np.arange(1, 26), yticklabels=np.arange(1, 26))
+
+# Visualize the confusion matrix
+plt.figure(figsize=(10, 8))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=np.arange(1, num_labels + 1), yticklabels=np.arange(1, num_labels + 1))
 plt.title('Confusion Matrix')
 plt.xlabel('Predicted')
 plt.ylabel('True')
