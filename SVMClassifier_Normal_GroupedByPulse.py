@@ -40,6 +40,7 @@ X_reshaped = X
 # Create an array of group indices (0, 1, 2, ..., num_groups - 1)
 num_groups = 250  # Number of groups
 files_per_group = 10  # Files per group
+num_labels = 25
 total_samples = num_groups * files_per_group
 group_indices = np.repeat(np.arange(num_groups), files_per_group)
 
@@ -48,7 +49,7 @@ from sklearn.model_selection import train_test_split
 
 # Split group indices into train and test groups
 train_groups, test_groups = train_test_split(
-    np.unique(group_indices), test_size=0.2
+    np.unique(group_indices), test_size=0.2, random_state=10
 )
 # , random_state=10 seed works for fully distributing the test class from 1 to 25
 print(train_groups.tolist())
@@ -85,11 +86,14 @@ print(y_pred.tolist())
 accuracy = accuracy_score(y_test, y_pred)
 print(f"Test accuracy: {accuracy * 100:.2f}%")
 
-# Generate the confusion matrix
-cm = confusion_matrix(y_test, y_pred)
-plt.figure(figsize=(8, 6))
-sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=np.arange(1, 26), yticklabels=np.arange(1, 26))
-plt.title('Confusion Matrix')
+# Generate the confusion matrix with fixed size
+all_labels = np.arange(1, num_labels + 1)  # All possible labels from 1 to 25
+cm = confusion_matrix(y_test, y_pred, labels=all_labels)
+
+# Visualize the confusion matrix
+plt.figure(figsize=(10, 8))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=all_labels, yticklabels=all_labels)
+plt.title('Confusion Matrix (Fixed Size)')
 plt.xlabel('Predicted')
 plt.ylabel('True')
 plt.show()

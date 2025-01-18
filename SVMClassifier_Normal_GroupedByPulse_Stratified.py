@@ -53,15 +53,15 @@ for label in range(1, num_labels + 1):
     label_rows = np.where(y == label)[0]
 
     # Split the indices: first 80 for training, last 20 for testing
-    #train_indices.extend(label_rows[:80])
-    #test_indices.extend(label_rows[80:])
+    train_indices.extend(label_rows[:80])
+    test_indices.extend(label_rows[80:])
     
     # Split the indices: 
     # First 20 rows and last 60 rows for training
-    train_indices.extend(label_rows[:20])
-    train_indices.extend(label_rows[40:])
+    #train_indices.extend(label_rows[:20])
+    #train_indices.extend(label_rows[40:])
     # 2nd set of 20 rows for testing
-    test_indices.extend(label_rows[20:40])
+    #test_indices.extend(label_rows[20:40])
 
 # Convert to arrays for indexing
 train_indices = np.array(train_indices)
@@ -82,13 +82,14 @@ y_pred = svm_model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 print(f"Test accuracy: {accuracy * 100:.2f}%")
 
-# Generate the confusion matrix
-cm = confusion_matrix(y_test, y_pred)
+# Generate the confusion matrix with fixed size
+all_labels = np.arange(1, num_labels + 1)  # All possible labels from 1 to 25
+cm = confusion_matrix(y_test, y_pred, labels=all_labels)
 
 # Visualize the confusion matrix
 plt.figure(figsize=(10, 8))
-sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=np.arange(1, num_labels + 1), yticklabels=np.arange(1, num_labels + 1))
-plt.title('Confusion Matrix')
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=all_labels, yticklabels=all_labels)
+plt.title('Confusion Matrix (Fixed Size)')
 plt.xlabel('Predicted')
 plt.ylabel('True')
 plt.show()
