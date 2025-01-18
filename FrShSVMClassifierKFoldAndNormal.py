@@ -92,7 +92,7 @@ print(f"Test accuracy: {accuracy * 100:.2f}%")
 # Generate the confusion matrix
 cm = confusion_matrix(y_test, y_pred)
 plt.figure(figsize=(8, 6))
-sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=np.arange(1, 10), yticklabels=np.arange(1, 10))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=np.arange(1, 26), yticklabels=np.arange(1, 26))
 plt.title('Confusion Matrix')
 plt.xlabel('Predicted')
 plt.ylabel('True')
