@@ -26,15 +26,17 @@ trimic1_3 = 'Data/5x5_trimic1_3.txt'
 trimic1_1and2 = 'Data/5x5_trimic1_1and2.txt' # Remove 1 microphone from the row
 trimic1_2and3 = 'Data/5x5_trimic1_2and3.txt'
 trimic1_1and3 = 'Data/5x5_trimic1_1and3.txt'
+trimic1_1pulse = 'Data/5x5_trimic1_onepulse.txt' # Extract 1 pulse instead of 10 pulses
+trimic1_1pulse_labels = 'Data/5x5_trimic1_onepulse_labels.txt' 
 
 # Small array with 3 labels, and 3 "pulses per file," that is used to test the grouping function
 groupingTest = 'Data/groupsorttest_features.txt'
 groupingTestLabels = 'Data/groupsorttest_labels.txt'
 
 # SELECT FILENAMES FOR ANALYSIS
-fileName = trimic1_3
+fileName = trimic1_1pulse
 
-labelFileName = trimic1relabels
+labelFileName = trimic1_1pulse_labels
 
 # Read features and labels
 X = np.loadtxt(fileName)
@@ -59,8 +61,8 @@ for label in range(1, num_labels + 1):
     label_rows = np.where(y == label)[0]
 
     # Split the indices: first 80 for training, last 20 for testing
-    train_indices.extend(label_rows[:80])
-    test_indices.extend(label_rows[80:])
+    train_indices.extend(label_rows[:8])
+    test_indices.extend(label_rows[8:])
     
     # Split the indices: 
     # First 20 rows and last 60 rows for training

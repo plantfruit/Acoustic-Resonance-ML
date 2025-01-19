@@ -25,12 +25,13 @@ trimic1duplicate = 'Data/5by5_trimic1_possibleduplicate.txt'
 trimic1labels = 'Data/5by5_trimic1_labels.txt'
 trimic1re = 'Data/5x5_trimic1_re.txt' # Only 10 pulses per file
 trimic1relabels = 'Data/5by5_trimic1_re_labels.txt'
-
+trimic1_1pulse = 'Data/5x5_trimic1_onepulse.txt' # Extract 1 pulse instead of 10 pulses
+trimic1_1pulse_labels = 'Data/5x5_trimic1_onepulse_labels.txt' 
 
 # SELECT FILENAMES FOR ANALYSIS
-fileName = trimic1re
+fileName = trimic1_1pulse
 
-labelFileName = trimic1relabels
+labelFileName = trimic1_1pulse_labels
 
 # Read features and labels
 X = np.loadtxt(fileName)
