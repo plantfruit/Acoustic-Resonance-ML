@@ -20,13 +20,19 @@ trimic1duplicate = 'Data/5by5_trimic1_possibleduplicate.txt'
 trimic1labels = 'Data/5by5_trimic1_labels.txt'
 trimic1re = 'Data/5x5_trimic1_re.txt' # Only 10 pulses per file
 trimic1relabels = 'Data/5by5_trimic1_re_labels.txt'
+trimic1_1 = 'Data/5x5_trimic1_1.txt' # Individual microphones' rows
+trimic1_2 = 'Data/5x5_trimic1_2.txt'
+trimic1_3 = 'Data/5x5_trimic1_3.txt'
+trimic1_1and2 = 'Data/5x5_trimic1_1and2.txt' # Remove 1 microphone from the row
+trimic1_2and3 = 'Data/5x5_trimic1_2and3.txt'
+trimic1_1and3 = 'Data/5x5_trimic1_1and3.txt'
 
 # Small array with 3 labels, and 3 "pulses per file," that is used to test the grouping function
 groupingTest = 'Data/groupsorttest_features.txt'
 groupingTestLabels = 'Data/groupsorttest_labels.txt'
 
 # SELECT FILENAMES FOR ANALYSIS
-fileName = trimic1re
+fileName = trimic1_3
 
 labelFileName = trimic1relabels
 
