@@ -29,14 +29,17 @@ trimic1_1and3 = 'Data/5x5_trimic1_1and3.txt'
 trimic1_1pulse = 'Data/5x5_trimic1_onepulse.txt' # Extract 1 pulse instead of 10 pulses
 trimic1_1pulse_labels = 'Data/5x5_trimic1_onepulse_labels.txt' 
 
+miscobj2 = 'Data/miscobj2.txt'
+miscobj2labels = 'Data/miscobj2_labels.txt'
+
 # Small array with 3 labels, and 3 "pulses per file," that is used to test the grouping function
 groupingTest = 'Data/groupsorttest_features.txt'
 groupingTestLabels = 'Data/groupsorttest_labels.txt'
 
 # SELECT FILENAMES FOR ANALYSIS
-fileName = trimic1_1pulse
+fileName = miscobj2
 
-labelFileName = trimic1_1pulse_labels
+labelFileName = miscobj2labels
 
 # Read features and labels
 X = np.loadtxt(fileName)
@@ -46,9 +49,9 @@ y = np.loadtxt(labelFileName)
 X_reshaped = X
 
 # Dataset Parameters
-num_labels = 25
-files_per_label = 10
-rows_per_file = 100
+num_labels = 5
+files_per_label = 3
+rows_per_file = 5
 total_files = num_labels * files_per_label
 total_rows = total_files * rows_per_file
 
@@ -61,8 +64,12 @@ for label in range(1, num_labels + 1):
     label_rows = np.where(y == label)[0]
 
     # Split the indices: first 80 for training, last 20 for testing
-    train_indices.extend(label_rows[:8])
-    test_indices.extend(label_rows[8:])
+    #train_indices.extend(label_rows[:round(0.8 * files_per_label * rows_per_file)])
+    #test_indices.extend(label_rows[round(0.8 * files_per_label * rows_per_file):])
+
+    # Manually split the indices 
+    train_indices.extend(label_rows[:10])
+    test_indices.extend(label_rows[10:])
     
     # Split the indices: 
     # First 20 rows and last 60 rows for training

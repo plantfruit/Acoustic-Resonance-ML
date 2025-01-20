@@ -26,12 +26,15 @@ trimic1labels = 'Data/5by5_trimic1_labels.txt'
 trimic1re = 'Data/5x5_trimic1_re.txt' # Only 10 pulses per file
 trimic1relabels = 'Data/5by5_trimic1_re_labels.txt'
 trimic1_1pulse = 'Data/5x5_trimic1_onepulse.txt' # Extract 1 pulse instead of 10 pulses
-trimic1_1pulse_labels = 'Data/5x5_trimic1_onepulse_labels.txt' 
+trimic1_1pulse_labels = 'Data/5x5_trimic1_onepulse_labels.txt'
+
+miscobj2 = 'Data/miscobj2.txt'
+miscobj2labels = 'Data/miscobj2_labels.txt'
 
 # SELECT FILENAMES FOR ANALYSIS
-fileName = trimic1_1pulse
+fileName = miscobj2
 
-labelFileName = trimic1_1pulse_labels
+labelFileName = miscobj2labels
 
 # Read features and labels
 X = np.loadtxt(fileName)

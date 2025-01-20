@@ -20,15 +20,26 @@ trimic1duplicate = 'Data/5by5_trimic1_possibleduplicate.txt'
 trimic1labels = 'Data/5by5_trimic1_labels.txt'
 trimic1re = 'Data/5x5_trimic1_re.txt' # Only 10 pulses per file
 trimic1relabels = 'Data/5by5_trimic1_re_labels.txt'
+trimic1_1 = 'Data/5x5_trimic1_1.txt' # Individual microphones' rows
+trimic1_2 = 'Data/5x5_trimic1_2.txt'
+trimic1_3 = 'Data/5x5_trimic1_3.txt'
+trimic1_1and2 = 'Data/5x5_trimic1_1and2.txt' # Remove 1 microphone from the row
+trimic1_2and3 = 'Data/5x5_trimic1_2and3.txt'
+trimic1_1and3 = 'Data/5x5_trimic1_1and3.txt'
+trimic1_1pulse = 'Data/5x5_trimic1_onepulse.txt' # Extract 1 pulse instead of 10 pulses
+trimic1_1pulse_labels = 'Data/5x5_trimic1_onepulse_labels.txt' 
+
+miscobj2 = 'Data/miscobj2.txt'
+miscobj2labels = 'Data/miscobj2_labels.txt'
 
 # Small array with 3 labels, and 3 "pulses per file," that is used to test the grouping function
 groupingTest = 'Data/groupsorttest_features.txt'
 groupingTestLabels = 'Data/groupsorttest_labels.txt'
 
 # SELECT FILENAMES FOR ANALYSIS
-fileName = trimic1re
+fileName = miscobj2
 
-labelFileName = trimic1relabels
+labelFileName = miscobj2labels
 
 # Read features and labels
 X = np.loadtxt(fileName)
@@ -38,9 +49,9 @@ y = np.loadtxt(labelFileName)
 X_reshaped = X
 
 # Create an array of group indices (0, 1, 2, ..., num_groups - 1)
-num_groups = 250  # Number of groups
-files_per_group = 10  # Files per group
-num_labels = 25
+num_groups = 15  # Number of groups
+files_per_group = 5  # Files per group
+num_labels = 5
 total_samples = num_groups * files_per_group
 group_indices = np.repeat(np.arange(num_groups), files_per_group)
 
@@ -49,7 +60,7 @@ from sklearn.model_selection import train_test_split
 
 # Split group indices into train and test groups
 train_groups, test_groups = train_test_split(
-    np.unique(group_indices), test_size=0.2, random_state=10
+    np.unique(group_indices), test_size=0.2
 )
 # , random_state=10 seed works for fully distributing the test class from 1 to 25
 print(train_groups.tolist())
