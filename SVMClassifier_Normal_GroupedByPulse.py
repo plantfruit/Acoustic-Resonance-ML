@@ -51,7 +51,7 @@ X_reshaped = X
 # Create an array of group indices (0, 1, 2, ..., num_groups - 1)
 num_groups = 15  # Number of groups
 files_per_group = 5  # Files per group
-num_labels = 5
+num_labels = 25
 total_samples = num_groups * files_per_group
 group_indices = np.repeat(np.arange(num_groups), files_per_group)
 
