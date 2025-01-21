@@ -26,12 +26,15 @@ trimic1labels = 'Data/5by5_trimic1_labels.txt'
 trimic1re = 'Data/5x5_trimic1_re.txt' # Only 10 pulses per file
 trimic1relabels = 'Data/5by5_trimic1_re_labels.txt'
 trimic1_1pulse = 'Data/5x5_trimic1_onepulse.txt' # Extract 1 pulse instead of 10 pulses
-trimic1_1pulse_labels = 'Data/5x5_trimic1_onepulse_labels.txt' 
+trimic1_1pulse_labels = 'Data/5x5_trimic1_onepulse_labels.txt'
+
+miscobj1 = 'Data/miscobj1.txt'
+miscobj1labels = 'Data/miscobj1_labels.txt'
 
 # SELECT FILENAMES FOR ANALYSIS
-fileName = trimic1_1pulse
+fileName = miscobj1
 
-labelFileName = trimic1_1pulse_labels
+labelFileName = miscobj1labels
 
 # Read features and labels
 X = np.loadtxt(fileName)
@@ -55,18 +58,18 @@ predictions = cross_val_predict(svm_model, X_reshaped, y, cv=5)
 
 # Perform 5-fold cross-validation
 accuracy = accuracy_score(y, predictions)
-#cv_scores = cross_val_score(svm_model, X_reshaped, y, cv=5)
+cv_scores = cross_val_score(svm_model, X_reshaped, y, cv=5)
 
 
 # Print the accuracy
 print(accuracy)
-#print(f"Accuracy for each fold: {cv_scores}")
+print(f"Accuracy for each fold: {cv_scores}")
 #print(f"Average cross-validation accuracy: {cv_scores.mean() * 100:.2f}%")
 
 # Generate the confusion matrix
 cm = confusion_matrix(y, predictions)
 plt.figure(figsize=(8, 6))
-sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=np.arange(1, 26), yticklabels=np.arange(1, 26))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=np.arange(1, 5), yticklabels=np.arange(1,5))
 plt.title('Confusion Matrix')
 plt.xlabel('Predicted')
 plt.ylabel('True')
