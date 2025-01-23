@@ -93,19 +93,27 @@ for label in range(1, num_labels + 1):
 ##    test_indices.extend(label_rows[140:150])
     
     # Split the indices: first 80 for training, last 20 for testing
-    #train_indices.extend(label_rows[:100])
-    #test_indices.extend(label_rows[100:])
+    #train_indices.extend(label_rows[:50])
+    #test_indices.extend(label_rows[50:])
 
     # Reversed order
-    #train_indices.extend(label_rows[50:])
-    #test_indices.extend(label_rows[:50])
+    #train_indices.extend(label_rows[100:])
+    #test_indices.extend(label_rows[:100])
     
     # Split the indices: 
     # First 20 rows and last 60 rows for training
-    train_indices.extend(label_rows[:50])
-    train_indices.extend(label_rows[100:])
+    #train_indices.extend(label_rows[:50])
+    #train_indices.extend(label_rows[100:])
     # 2nd set of 20 rows for testing
-    test_indices.extend(label_rows[50:100])
+    #test_indices.extend(label_rows[50:100])
+
+    # Split the indices: 
+    # First 20 rows and last 60 rows for training
+    test_indices.extend(label_rows[:50])
+    test_indices.extend(label_rows[100:])
+    # 2nd set of 20 rows for testing
+    train_indices.extend(label_rows[50:100])
+
 
 # Convert to arrays for indexing
 train_indices = np.array(train_indices)
