@@ -108,10 +108,10 @@ for label in range(1, num_labels + 1):
     #test_indices.extend(label_rows[50:100])
 
     # Split the indices: 
-    # First 20 rows and last 60 rows for training
+    # First 20 rows and last 60 rows for testing
     test_indices.extend(label_rows[:50])
     test_indices.extend(label_rows[100:])
-    # 2nd set of 20 rows for testing
+    # 2nd set of 20 rows for training
     train_indices.extend(label_rows[50:100])
 
 
